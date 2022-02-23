@@ -14,7 +14,7 @@ export default new Vuex.Store({
   state: {
     today: dayjs(new Date()).format("YYYY-MM-DD"),
     toDate: dayjs(new Date()).format("YYYY-MM-DD"),
-    info: [],
+    info: null,
     loading: false,
   },
   mutations: {},
