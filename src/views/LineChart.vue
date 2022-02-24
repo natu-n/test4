@@ -1,21 +1,17 @@
 <script lang="ts">
+// import { Chart } from "vue-chartjs";
 import { Line } from "vue-chartjs";
+import chartjsPluginAnnotation from "chartjs-plugin-annotation";
 
+// Chart.register(chartjsPluginAnnotation);
 export default {
   name: "LineChart",
   extends: Line,
+  type: "line",
   data() {
     return {
       chartData: {
-        labels: [
-          "2021-02-22",
-          "2921-02-21",
-          "2021-02-20",
-          "2021-02-19",
-          "2021-02-18",
-          "2021^02-17",
-          "2021-02-16",
-        ],
+        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         datasets: [
           {
             label: "Diastolic",
@@ -32,56 +28,6 @@ export default {
             data: [161, 154, 193, 147, 133, 157, 176],
             lineTension: 0,
             fill: false,
-          },
-          {
-            label: "32",
-            type: "line",
-            borderColor: "orange",
-            backgroundColor: "#FF980033",
-            data: [84, 84, 84, 84, 84, 84, 84],
-            lineTension: 0,
-            pointRadius: 0,
-            fill: "start",
-          },
-          {
-            label: "3",
-            type: "line",
-            borderColor: "green",
-            backgroundColor: "#4CAF5033",
-            data: [79, 79, 79, 79, 79, 79, 79],
-            lineTension: 0,
-            pointRadius: 0,
-            fill: "start",
-          },
-          {
-            label: "33",
-            type: "line",
-            borderColor: "white",
-            backgroundColor: "#FFFFFF",
-            data: [120, 120, 120, 120, 120, 120, 120],
-            lineTension: 0,
-            pointRadius: 0,
-            fill: "start",
-          },
-          {
-            label: "34",
-            type: "line",
-            borderColor: "green",
-            backgroundColor: "#4CAF5033",
-            data: [129, 129, 129, 129, 129, 129, 129],
-            lineTension: 0,
-            pointRadius: 0,
-            fill: "start",
-          },
-          {
-            label: "35",
-            type: "line",
-            borderColor: "orange",
-            backgroundColor: "#FF980033",
-            data: [134, 134, 134, 134, 134, 134, 134],
-            lineTension: 0,
-            pointRadius: 0,
-            fill: "start",
           },
         ],
       },
@@ -102,10 +48,65 @@ export default {
             },
           ],
         },
+        // plugins: {
+        //   autocolors: false,
+        //   annotation: {
+        //     annotations: {
+        //       annotations: {
+        //         line1: {
+        //           type: "line",
+        //           yMin: 68,
+        //           yMax: 68,
+        //           borderColor: "rgb(255, 99, 132)",
+        //           borderWidth: 2,
+        //         },
+        //       },
+        //     },
+        //   },
+        // },
       },
     };
   },
   mounted: function () {
+    this.addPlugin(chartjsPluginAnnotation);
+    this.options = {
+      drawTime: "afterDraw",
+      scales: {
+        yAxes: [
+          {
+            id: "y-axis-1",
+            type: "linear",
+          },
+        ],
+      },
+      annotation: {
+        annotations: [
+          {
+            type: "line",
+            scaleID: "y-axis-1",
+            mode: "horizontal",
+            // drawTime: "afterDraw",
+            // yMin: 79,
+            // yMax: 79,
+            value: 79,
+            borderColor: "green",
+            borderWidth: 2,
+          },
+          {
+            type: "line",
+            scaleID: "y-axis-1",
+            mode: "horizontal",
+            // drawTime: "afterDraw",
+            // yMin: 84,
+            // yMax: 84,
+            value: 84,
+            borderColor: "orange",
+            borderWidth: 2,
+          },
+        ],
+      },
+    };
+
     this.renderChart(this.chartData, this.options);
   },
 };
