@@ -4,7 +4,65 @@ import { Line } from "vue-chartjs";
 export default {
   name: "LineChart",
   extends: Line,
-  data() {
+  data(): {
+    chartData: {
+      labels: string[];
+      datasets: (
+        | {
+            label: string;
+            type: string;
+            borderColor: string;
+            backgroundColor: string;
+            borderWidth: number;
+            lineTension: number;
+            fill: boolean;
+            data: number[];
+            pointRadius?: undefined;
+            tooltips?: undefined;
+          }
+        | {
+            label: string;
+            type: string;
+            borderColor: string;
+            backgroundColor: string;
+            lineTension: number;
+            fill: boolean;
+            data: number[];
+            borderWidth?: undefined;
+            pointRadius?: undefined;
+            tooltips?: undefined;
+          }
+        | {
+            label: string;
+            type: string;
+            borderColor: string;
+            lineTension: number;
+            pointRadius: number;
+            fill: boolean;
+            tooltips: { enabled: boolean };
+            data: number[];
+            backgroundColor?: undefined;
+            borderWidth?: undefined;
+          }
+      )[];
+    };
+    options: {
+      title: { display: boolean };
+      legend: {
+        position: string;
+        labels: {
+          fontSize: number;
+          filter: (items: { text: string }) => boolean;
+        };
+      };
+      responsive: boolean;
+      maintainAspectRatio: boolean;
+      width: number;
+      scales: {
+        yAxes: { ticks: { suggestedMin: number; suggestedMax: number } }[];
+      };
+    };
+  } {
     return {
       chartData: {
         labels: ["Mon.", "Tue.", "Wed.", "Thu.", "Fri.", "Sat.", "Sun."],
@@ -144,7 +202,7 @@ export default {
       },
     };
   },
-  mounted: function () {
+  mounted: function (): void {
     this.renderChart(this.chartData, this.options);
   },
 };
