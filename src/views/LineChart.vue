@@ -13,6 +13,7 @@ export default {
             label: "Diastolic",
             type: "line",
             borderColor: "#2962FF",
+            backgroundColor: "#2962FF99",
             borderWidth: 5,
             lineTension: 0,
             fill: false,
@@ -22,6 +23,7 @@ export default {
             label: "Diastolic",
             type: "line",
             borderColor: "#448AFF",
+            backgroundColor: "#448AFF88",
             lineTension: 0,
             fill: false,
             data: [107, 103, 106, 89, 93, 93, 96],
@@ -30,6 +32,7 @@ export default {
             label: "Diastolic",
             type: "line",
             borderColor: "#82B1FF",
+            backgroundColor: "#82B1FF88",
             lineTension: 0,
             fill: false,
             data: [102, 98, 100, 84, 88, 83, 100],
@@ -38,6 +41,7 @@ export default {
             label: "Systolic",
             type: "line",
             borderColor: "#D50000",
+            backgroundColor: "#D5000088",
             borderWidth: 5,
             lineTension: 0,
             fill: false,
@@ -47,6 +51,7 @@ export default {
             label: "Systolic",
             type: "line",
             borderColor: "#FF5252",
+            backgroundColor: "#FF525288",
             lineTension: 0,
             fill: false,
             data: [151, 144, 183, 137, 123, 147, 161],
@@ -55,6 +60,7 @@ export default {
             label: "Systolic",
             type: "line",
             borderColor: "#FF8A80",
+            backgroundColor: "#FF8A8088",
             lineTension: 0,
             fill: false,
             data: [146, 139, 178, 132, 118, 142, 166],
@@ -67,6 +73,9 @@ export default {
             lineTension: 0,
             pointRadius: 0,
             fill: false,
+            tooltips: {
+              enabled: false,
+            },
             data: [79, 79, 79, 79, 79, 79, 79],
           },
           {
@@ -76,6 +85,9 @@ export default {
             lineTension: 0,
             pointRadius: 0,
             fill: false,
+            tooltips: {
+              enabled: false,
+            },
             data: [84, 84, 84, 84, 84, 84, 84],
           },
           {
@@ -85,6 +97,9 @@ export default {
             lineTension: 0,
             pointRadius: 0,
             fill: false,
+            tooltips: {
+              enabled: false,
+            },
             data: [129, 129, 129, 129, 129, 129, 129],
           },
           {
@@ -94,6 +109,9 @@ export default {
             lineTension: 0,
             pointRadius: 0,
             fill: false,
+            tooltips: {
+              enabled: false,
+            },
             data: [134, 134, 134, 134, 134, 134, 134],
           },
         ],
@@ -104,11 +122,10 @@ export default {
         },
         legend: {
           position: "top",
-          fontSize: 18,
           labels: {
-            filter: function (items) {
-              return items.text != "Reference";
-            },
+            fontSize: 16,
+            filter: (items: { text: string }): boolean =>
+              items.text != "Reference",
           },
         },
         responsive: true,
