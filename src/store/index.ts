@@ -14,7 +14,7 @@ export default new Vuex.Store({
   state: {
     today: dayjs(new Date()).format("YYYY-MM-DD"),
     toDate: dayjs(new Date()).format("YYYY-MM-DD"),
-    info: null,
+    info: {},
     loading: false,
   },
   mutations: {},
@@ -34,16 +34,16 @@ export default new Vuex.Store({
       }
     },
     setInfo(state, info): void {
-      state.info = info;
-      console.log(`setInfo:${state.info.length}`);
+      state.state.info = info;
+      console.log(`setInfo:${state.state.info}`);
     },
     setLoading(state, loading): void {
-      state.loading = loading;
-      console.log(`setLoading:${state.loading}`);
+      state.state.loading = loading;
+      console.log(`setLoading:${state.state.loading}`);
     },
     setToDate(state, toDate): void {
-      state.toDate = toDate;
-      console.log(`setToDate:${state.toDate}`);
+      state.state.toDate = toDate;
+      console.log(`setToDate:${state.state.toDate}`);
     },
   },
   modules: {},

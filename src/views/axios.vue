@@ -5,7 +5,7 @@
         <p v-if="this.toDate == null" v-show="true">
           {{ (this.toDate = this.$store.state.toDate) }}
         </p>
-        <v-dialog
+        <!-- <v-dialog
           ref="dialog"
           v-model="modal"
           :return-value.sync="toDate"
@@ -17,7 +17,7 @@
             <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
             <v-btn text color="primary" @click="setDate(toDate)">OK</v-btn>
           </v-date-picker>
-        </v-dialog>
+        </v-dialog> -->
       </template>
 
       <v-data-table
@@ -26,7 +26,6 @@
         :headers="headers"
         :items="this.$store.state.info"
         :items-per-page="14"
-        search="search"
         :fixed-header="true"
         :sort-by="['date']"
         :sort-desc="['true']"
@@ -75,12 +74,16 @@ export default {
       },
     ],
     page: 1,
-    toDate: null,
+    toDate: dayjs().format("MM-DD-YYYY"),
     modal: false,
   }),
 
   created: function (): void {
-    this.$store.dispatch("getJSON");
+    if (!this.$store.state.loading) {
+      this.$store.dispatch("getJSON");
+      //
+      console.log("axios:");
+    }
   },
 
   methods: {
@@ -90,7 +93,6 @@ export default {
     },
 
     customFilter(value: number): boolean {
-      // return value != null
       return this.fromDate <= value && value <= this.toDate;
     },
     formatDate(date): string {
