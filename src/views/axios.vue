@@ -5,19 +5,6 @@
         <p v-if="this.toDate == null" v-show="true">
           {{ (this.toDate = this.$store.state.toDate) }}
         </p>
-        <!-- <v-dialog
-          ref="dialog"
-          v-model="modal"
-          :return-value.sync="toDate"
-          persistent
-          width="290px"
-        >
-          <template v-slot:activator="{ on }"> </template>
-          <v-date-picker v-model="toDate" :max="$store.state.today" scrollable>
-            <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
-            <v-btn text color="primary" @click="setDate(toDate)">OK</v-btn>
-          </v-date-picker>
-        </v-dialog> -->
       </template>
 
       <v-data-table
