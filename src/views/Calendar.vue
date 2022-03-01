@@ -41,11 +41,11 @@ export default {
     functionEvents(date: string): false | string[] {
       //
       let retArry = [];
-      let target: { diastolic: number; systolic: number; };
+      let target: { diastolic: number; systolic: number };
       if (this.$store.state.loading) {
-        target = this.$store.state.info.find((d) => {
-          return d.date === date;
-        });
+        target = this.$store.state.info.find(function(d: { date: string; }): boolean {
+            return d.date===date;
+          });
       }
       if (target) {
         console.log(`${date} = ${target.diastolic}:${target.systolic}`);
