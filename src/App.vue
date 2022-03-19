@@ -15,12 +15,16 @@
         <v-row>
           <v-col cols="2">
             <v-sheet rounded="lg">
-              <v-list color="transparent">
-                <v-list-item v-for="n in 5" :key="n" link>
-                  <v-list-item-content>
-                    <v-list-item-title> List Item {{ n }} </v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
+              <v-list>
+                <v-list-item-group v-model="model">
+                  <v-list-item v-for="(period, i) in periods" :key="i">
+                    <v-list-item-content>
+                      <v-list-item-title
+                        v-text="period"
+                      ></v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list-item-group>
 
                 <v-divider class="my-2"></v-divider>
 
@@ -49,10 +53,17 @@ import Vue from "vue";
 
 export default Vue.extend({
   name: "App",
-  el: "#app",
 
   data: () => ({
     links: ["Calendar", "DataGrid", "LineChart", "Updates"],
+    periods: [
+      "last week",
+      "one month ago",
+      "3 months ago",
+      "6 months ago",
+      "last year",
+      "3 years ago",
+    ],
   }),
   mounted: function (): void {
     console.info("dispatch");
