@@ -1,6 +1,5 @@
 <script lang="ts">
 import dayjs from "dayjs";
-// var items = [];
 
 export default {
   data() {
@@ -39,6 +38,9 @@ export default {
       else if (bp > 79) return "orange";
       else return "green";
     },
+    filter(val): boolean {
+      return val;
+    },
   },
   computed: {
     foo(): boolean {
@@ -68,6 +70,8 @@ export default {
       :fixed-header="true"
       :sort-by="['date']"
       :sort-desc="['true']"
+      :custom-filter="filter"
+      search="null"
       :footer-props="{
         showFirstLastPage: true,
         firstIcon: 'mdi-arrow-collapse-left',
