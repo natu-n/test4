@@ -33,17 +33,17 @@ export default {
     date2: dayjs().format("YYYY-MM-DD"),
   }),
 
-  created: function (): void {
-    this.$store.dispatch("getJSON");
-  },
+  // created: function (): void {
+  //   this.$store.dispatch("getJSON");
+  // },
 
   methods: {
     functionEvents(date: string): false | string[] {
       //
       let retArry = [];
       let target: { diastolic: number; systolic: number };
-      if (this.$store.state.loading) {
-        target = this.$store.state.info.find(function(d: { date: string; }): boolean {
+      if (this.$store.getters.isLoaded) {
+        target = this.$store.getters.info.find(function(d: { date: string; }): boolean {
             return d.date===date;
           });
       }
