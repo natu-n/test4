@@ -38,7 +38,7 @@ export default {
       else if (bp > 79) return "orange";
       else return "green";
     },
-    filter(val): boolean {
+    filter(val: any): boolean {
       return val;
     },
   },
@@ -71,7 +71,6 @@ export default {
       :sort-by="['date']"
       :sort-desc="['true']"
       :custom-filter="filter"
-      search="null"
       :footer-props="{
         showFirstLastPage: true,
         firstIcon: 'mdi-arrow-collapse-left',
