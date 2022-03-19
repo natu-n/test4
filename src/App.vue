@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <v-app id="app">
     <v-app-bar app color="white" flat height="50">
       <v-container class="py-0 fill-height">
         <v-tabs>
@@ -25,12 +25,20 @@
                     </v-list-item-content>
                   </v-list-item>
                 </v-list-item-group>
+
+                <v-divider class="my-2"></v-divider>
+
+                <v-list-item link color="grey lighten-4">
+                  <v-list-item-content>
+                    <v-list-item-title> Refresh </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
               </v-list>
             </v-sheet>
           </v-col>
 
           <v-col>
-            <v-sheet min-height="70vh" rounded="lg">
+            <v-sheet min-height="70vh" rounded="lg" eager>
               <router-view class="chart-container" />
             </v-sheet>
           </v-col>
@@ -57,5 +65,9 @@ export default Vue.extend({
       "3 years ago",
     ],
   }),
+  mounted: function (): void {
+    console.info("dispatch");
+    this.$store.dispatch("getJSON");
+  },
 });
 </script>
