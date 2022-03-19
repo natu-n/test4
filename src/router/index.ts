@@ -19,7 +19,7 @@ export default new Router({
     {
       path: "/calendar",
       name: "calendar",
-      component: loadView("Home"),
+      component: loadView("Calendar"),
     },
     {
       path: "/datagrid",
@@ -29,7 +29,7 @@ export default new Router({
     {
       path: "/LineChart",
       name: "LineChart",
-      component: loadView("Home"),
+      component: loadView("LineChart"),
     },
   ],
 });
