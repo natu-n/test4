@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <v-app id="app">
     <v-app-bar app color="white" flat height="50">
       <v-container class="py-0 fill-height">
         <v-tabs>
@@ -34,8 +34,8 @@
           </v-col>
 
           <v-col>
-            <v-sheet min-height="70vh" rounded="lg">
-              <router-view class="chart-container"/>
+            <v-sheet min-height="70vh" rounded="lg" eager>
+              <router-view class="chart-container" />
             </v-sheet>
           </v-col>
         </v-row>
@@ -49,9 +49,14 @@ import Vue from "vue";
 
 export default Vue.extend({
   name: "App",
+  el: "#app",
 
   data: () => ({
     links: ["Calendar", "DataGrid", "LineChart", "Updates"],
   }),
+  mounted: function (): void {
+    console.info("dispatch");
+    this.$store.dispatch("getJSON");
+  },
 });
 </script>

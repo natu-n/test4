@@ -1,88 +1,32 @@
-<template>
-  <v-app>
-    <v-container>
-      <template v-if="$store.state.loading">
-        <p v-if="this.toDate == null" v-show="true">
-          {{ (this.toDate = this.$store.state.toDate) }}
-        </p>
-      </template>
-
-      <v-data-table
-        class="font-weight-bold elevation-1"
-        :dense="true"
-        :headers="headers"
-        :items="this.$store.state.info"
-        :items-per-page="14"
-        :fixed-header="true"
-        :sort-by="['date']"
-        :sort-desc="['true']"
-        :custom-filter="customFilter"
-        :footer-props="{
-          showFirstLastPage: true,
-          firstIcon: 'mdi-arrow-collapse-left',
-          lastIcon: 'mdi-arrow-collapse-right',
-          prevIcon: 'mdi-minus',
-          nextIcon: 'mdi-plus',
-          itemsPerPageOptions: [7, 14, 30, 90],
-        }"
-        height="500px"
-      >
-        <template v-slot:item.date="{ item }">
-          <td>{{ formatDate(item.date) }}</td>
-        </template>
-        <template v-slot:item.systolic="{ item }">
-          <v-chip :color="getSystolicColor(item.systolic)" dark small>{{
-            item.systolic
-          }}</v-chip>
-        </template>
-        <template v-slot:item.diastolic="{ item }">
-          <v-chip :color="getDiastolicColor(item.diastolic)" dark small>{{
-            item.diastolic
-          }}</v-chip>
-        </template>
-      </v-data-table>
-    </v-container>
-  </v-app>
-</template>
-
 <script lang="ts">
 import dayjs from "dayjs";
+// var items = [];
 
 export default {
-  data: () => ({
-    headers: [
-      { text: "date", align: "center", value: "date", sortable: false },
-      { text: "systolic", align: "center", value: "systolic", sortable: false },
-      {
-        text: "diastolic",
-        align: "center",
-        value: "diastolic",
-        sortable: false,
-      },
-    ],
-    page: 1,
-    toDate: dayjs().format("MM-DD-YYYY"),
-    modal: false,
-  }),
-
-  created: function (): void {
-    if (!this.$store.state.loading) {
-      this.$store.dispatch("getJSON");
-      //
-      console.log("axios:");
-    }
+  data() {
+    return {
+      items: [],
+      headers: [
+        { text: "date", align: "center", value: "date", sortable: false },
+        {
+          text: "systolic",
+          align: "center",
+          value: "systolic",
+          sortable: false,
+        },
+        {
+          text: "diastolic",
+          align: "center",
+          value: "diastolic",
+          sortable: false,
+        },
+      ],
+      page: 1,
+      modal: false,
+    };
   },
-
   methods: {
-    setDate(value: any): void {
-      this.$refs.dialog.save(value);
-      this.$store.commit("setToDate", value);
-    },
-
-    customFilter(value: number): boolean {
-      return this.fromDate <= value && value <= this.toDate;
-    },
-    formatDate(date): string {
+    formatDate(date: string): string {
       return dayjs(date).format("MM-DD-YYYY");
     },
     getSystolicColor(bp: number): string {
@@ -97,20 +41,65 @@ export default {
     },
   },
   computed: {
-    _fromDate: function (): string {
-      return dayjs(this.toDate).subtract(6, "month").format("YYYY-MM-DD");
+    foo(): boolean {
+      return this.$store.getters.isLoaded;
     },
-    get fromDate() {
-      return this._fromDate;
-    },
-    set fromDate(value) {
-      this._fromDate = value;
+  },
+  watch: {
+    foo: {
+      immediate: true,
+      handler: function (o: any, n: any): void {
+        console.info("watch");
+        this.items = this.$store.getters.info;
+      },
     },
   },
 };
 </script>
 
+<template>
+  <v-container>
+    <v-data-table
+      class="font-weight-bold elevation-1"
+      :dense="true"
+      :headers="headers"
+      :items="items"
+      :items-per-page="14"
+      :fixed-header="true"
+      :sort-by="['date']"
+      :sort-desc="['true']"
+      :footer-props="{
+        showFirstLastPage: true,
+        firstIcon: 'mdi-arrow-collapse-left',
+        lastIcon: 'mdi-arrow-collapse-right',
+        prevIcon: 'mdi-minus',
+        nextIcon: 'mdi-plus',
+        itemsPerPageOptions: [7, 14, 30, 90],
+      }"
+      height="500px"
+    >
+      <template v-slot:item.date="{ item }">
+        <td>{{ formatDate(item.date) }}</td>
+      </template>
+      <template v-slot:item.systolic="{ item }">
+        <v-chip :color="getSystolicColor(item.systolic)" dark small>{{
+          item.systolic
+        }}</v-chip>
+      </template>
+      <template v-slot:item.diastolic="{ item }">
+        <v-chip :color="getDiastolicColor(item.diastolic)" dark small>{{
+          item.diastolic
+        }}</v-chip>
+      </template>
+    </v-data-table>
+  </v-container>
+</template>
+
 <style>
+.v-data-table-header tr {
+  background-color: #7986cb;
+}
+
 .v-data-table tbody tr:nth-of-type(odd) {
   background-color: rgba(0, 0, 0, 0.05);
 }
