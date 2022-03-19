@@ -48,3 +48,15 @@ store.commit('increment')
 ### Fillterが有効ではない
 
 ### 非同期処理でDOMの更新が行われない。
+ToDo.md
+package.json
+src/App.vue
+src/main.ts
+src/router/index.ts
+src/store/index.ts
+src/views/Calendar.vue
+src/views/DataGrid.vue del
+src/views/LineChart.vue
+src/views/axios.vue
+src/vuex.d.ts new
+yarn.lock
