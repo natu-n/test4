@@ -27,9 +27,9 @@ export default new Router({
       component: loadView("axios"),
     },
     {
-      path: "/LineChart",
-      name: "LineChart",
-      component: loadView("LineChart"),
+      path: "/Chart",
+      name: "Chart",
+      component: loadView("BPChart"),
     },
   ],
 });

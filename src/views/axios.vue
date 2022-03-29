@@ -48,7 +48,7 @@ export default {
   watch: {
     foo: {
       immediate: true,
-      handler: function (o: any, n: any): void {
+      handler: function (): void {
         console.info("watch");
         this.items = this.$store.getters.info;
       },

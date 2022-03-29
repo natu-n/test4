@@ -17,7 +17,8 @@ export default new Vuex.Store({
   },
   getters: {
     today: (state) => state.today,
-    info: (state) => state.info.filter(item => item.date != ""),
+    // info: (state) => state.info.filter(item => item.date != ""),
+    info: (state) => state.info,
     isLoaded: (state) => state.isLoaded,
   },
   mutations: {

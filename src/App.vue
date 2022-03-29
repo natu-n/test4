@@ -16,7 +16,8 @@
           <v-col cols="2">
             <v-sheet rounded="lg">
               <v-list>
-                <v-list-item-group v-model="model">
+                <!-- <v-list-item-group v-model="model"> -->
+                <v-list-item-group>
                   <v-list-item v-for="(period, i) in periods" :key="i">
                     <v-list-item-content>
                       <v-list-item-title
@@ -55,7 +56,7 @@ export default Vue.extend({
   name: "App",
 
   data: () => ({
-    links: ["Calendar", "DataGrid", "LineChart", "Updates"],
+    links: ["Calendar", "DataGrid", "Chart", "Updates"],
     periods: [
       "last week",
       "one month ago",
