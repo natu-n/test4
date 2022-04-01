@@ -1,6 +1,6 @@
 <script lang="ts">
 import dayjs from "dayjs";
-// var items = [];
+import color from "../plugins/color";
 
 export default {
   data() {
@@ -29,15 +29,21 @@ export default {
     formatDate(date: string): string {
       return dayjs(date).format("MM-DD-YYYY");
     },
+    //
     getSystolicColor(bp: number): string {
-      if (bp > 134) return "red";
-      else if (bp > 129) return "orange";
-      else return "green";
+      return this.setColor(
+        color.SYSTOLIC_THRESHOLD.findIndex((systolic) => bp > systolic)
+      );
     },
+    //
     getDiastolicColor(bp: number): string {
-      if (bp > 84) return "red";
-      else if (bp > 79) return "orange";
-      else return "green";
+      return this.setColor(
+        color.DIASTOLIC_THRESHOLD.findIndex((diastolic) => bp > diastolic)
+      );
+    },
+    //
+    setColor(ix: number): string {
+      return color.COLORS[ix];
     },
   },
   computed: {
