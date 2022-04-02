@@ -30,38 +30,31 @@
 
 <script lang="ts">
 import dayjs from "dayjs";
-// import SYSTOLIC_THRESHOLD from "../const/color";
-// import DIASTOLIC_THRESHOLD from "../const/color";
-// import COLORS from "../const/color";
+import color from "../plugins/color";
 
 export default {
-  // mixins: [SYSTOLIC_THRESHOLD, DIASTOLIC_THRESHOLD, COLORS],
   data: () => ({
-    date1: dayjs().subtract(1, 'MONTH').endOf('month').format('YYYY-MM-DD'),
+    date1: dayjs().subtract(1, "MONTH").endOf("month").format("YYYY-MM-DD"),
     date2: dayjs().format("YYYY-MM-DD"),
     // max/minを同月に設定することで移動不可
     startOfTheMonth: dayjs().startOf("month").format("YYYY-MM-DD"),
     endOfTheMonth: dayjs().endOf("month").format("YYYY-MM-DD"),
     //
-    endOfLastMonth: dayjs().subtract(1, 'MONTH').endOf('month').format('YYYY-MM-DD'),
+    endOfLastMonth: dayjs()
+      .subtract(1, "MONTH")
+      .endOf("month")
+      .format("YYYY-MM-DD"),
+    color: color,
   }),
 
   // created: function (): void {
   //   this.$store.dispatch("getJSON");
   // },
 
-  created: {},
+  // computed:{},
 
   methods: {
     functionEvents(date: string): false | string[] {
-      // TODO:定数を外部に置いて共通化したい。
-      //  // @ts-ignore
-      // 収縮期血圧閾値
-      const SYSTOLIC_THRESHOLD = [134, 129, 0];
-      // 拡張期血圧閾値
-      const DIASTOLIC_THRESHOLD = [84, 79, 0];
-      // 閾値マーカ
-      const COLORS = ["red", "orange", "green"];
 
       if (!this.$store.getters.isLoaded) {
         return false;
@@ -75,24 +68,25 @@ export default {
       });
       //
       if (target) {
-        return [COLORS[getSystolicColor()], COLORS[getDiastolicColor()]];
+        return [
+          color.COLORS[getSystolicColor()],
+          color.COLORS[getDiastolicColor()],
+        ];
       } else return false;
       //
-      function getSystolicColor(): number {
-        return SYSTOLIC_THRESHOLD.findIndex(
+      function getSystolicColor(this: any): number {
+        return color.SYSTOLIC_THRESHOLD.findIndex(
           (systolic: number): boolean => systolic < target.systolic
         );
       }
       //
-      function getDiastolicColor(): number {
-        return DIASTOLIC_THRESHOLD.findIndex(
+      function getDiastolicColor(this: any): number {
+        return color.DIASTOLIC_THRESHOLD.findIndex(
           (diastolic: number): boolean => diastolic < target.diastolic
         );
       }
     },
     dblClick(date): void {
-      // this.$set(this.done, 0, true);
-      // alert(`You have just double clicked the following date: ${date}`);
       console.info("dblClick:" + date);
     },
   },
