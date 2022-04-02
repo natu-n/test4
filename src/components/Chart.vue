@@ -59,6 +59,7 @@ export default {
             },
           ],
         },
+        animation: false,
       },
     };
   },
