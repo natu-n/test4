@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import dayjs from "dayjs";
-import color from "../plugins/color";
+import color from "../const/color";
 
 export default {
   data: () => ({
@@ -44,7 +44,6 @@ export default {
       .subtract(1, "MONTH")
       .endOf("month")
       .format("YYYY-MM-DD"),
-    color: color,
   }),
 
   // created: function (): void {
