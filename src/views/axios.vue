@@ -1,9 +1,9 @@
 <script lang="ts">
 import dayjs from "dayjs";
-import color from "../plugins/color";
+import color from "../const/color";
 
 export default {
-  data() {
+  data(): { items: any[]; headers: { text: string; align: string; value: string; sortable: boolean; }[]; page: number; modal: boolean; } {
     return {
       items: [],
       headers: [
