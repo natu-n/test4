@@ -59,12 +59,15 @@ export default {
             },
           ],
         },
+        animation: false,
       },
     };
   },
-  // mounted() {
-  //   this.renderChart(this.data, this.options);
-  // },
+  //
+  mounted() {
+    this.renderChart(this.data, this.options);
+  },
+  //
   computed: {
     foo(): boolean {
       return this.$store.getters.isLoaded;
@@ -138,13 +141,13 @@ export default {
           this.data.datasets[index].lineTension = 0;
         }
 
-// TODO:ここで巻き上げた配列を消す
+        // TODO:ここで巻き上げた配列を消す
         var needDeleteCnt = 0;
         for (const [index, _] of this.data.datasets.entries()) {
           if (this.data.datasets[index].borderColor === undefined) {
             needDeleteCnt++;
           }
-        };
+        }
         this.data.datasets.length -= needDeleteCnt;
 
         this.data.datasets.push(
@@ -193,7 +196,7 @@ export default {
             data: [...Array(14)].map((x) => 134),
           }
         );
-// TODO:これをページ遷移の都度
+        // TODO:これをページ遷移の都度
         // this.$data._chart.destroy();
         this.renderChart(this.data, this.options);
       },
