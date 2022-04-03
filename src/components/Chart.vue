@@ -16,11 +16,9 @@ export default {
         type: "line",
         datasets: [
           {
-            borderWidth: 5,
             data: [],
           },
           {
-            borderWidth: 5,
             data: [],
           },
           {
@@ -79,6 +77,7 @@ export default {
       handler: function (): void {
         console.info("Cart:watch");
 
+        //  Memo: 日付の計算
         this.data.dateTo[0] = this.$store.getters.today;
         this.data.dateTo[1] = formatDate({
           day: dayjs(this.data.dateTo[0]).subtract(1, "Month"),
@@ -87,41 +86,38 @@ export default {
           day: dayjs(this.data.dateTo[0]).subtract(1, "Year"),
         });
 
-        for (const [index, _] of this.data.dateTo.entries()) {
-          this.data.dateFrom[index] = calculate1stDay(this.data.dateTo[index]);
+        for (const [ix, _] of this.data.dateTo.entries()) {
+          this.data.dateFrom[ix] = calculate1stDay(this.data.dateTo[ix]);
         }
 
         const items = [];
-        for (const [index, _] of this.data.dateTo.entries()) {
-          items[index] = this.$store.getters.info.filter(
+        for (const [ix, _] of this.data.dateTo.entries()) {
+          items[ix] = this.$store.getters.info.filter(
             (item: { date: string }) =>
               dayjs(item.date).isBetween(
-                this.data.dateFrom[index],
-                this.data.dateTo[index],
+                this.data.dateFrom[ix],
+                this.data.dateTo[ix],
                 null,
                 "(]" //  以下指定だと結果が？
               )
           );
         }
-        this.data.datasets[0].data = items[0].map(
-          (item: { systolic: number }) => item.systolic
-        );
-        this.data.datasets[2].data = items[1].map(
-          (item: { systolic: number }) => item.systolic
-        );
-        this.data.datasets[4].data = items[2].map(
-          (item: { systolic: number }) => item.systolic
-        );
-        this.data.datasets[1].data = items[0].map(
-          (item: { diastolic: number }) => item.diastolic
-        );
-        this.data.datasets[3].data = items[1].map(
-          (item: { diastolic: number }) => item.diastolic
-        );
-        this.data.datasets[5].data = items[2].map(
-          (item: { diastolic: number }) => item.diastolic
-        );
+        // 血圧価設定
+        interface bP {
+          //  bP as blood pressure
+          systolic: number;
+          diastolic: number;
+        }
+        this.data.datasets[0].data = items[0].map((item: bP) => item.systolic);
+        this.data.datasets[1].data = items[0].map((item: bP) => item.diastolic);
+        //
+        this.data.datasets[2].data = items[1].map((item: bP) => item.systolic);
+        this.data.datasets[3].data = items[1].map((item: bP) => item.diastolic);
+        //
+        this.data.datasets[4].data = items[2].map((item: bP) => item.systolic);
+        this.data.datasets[5].data = items[2].map((item: bP) => item.diastolic);
 
+        //ToDo: こっから
         const borderColors = [
           "#D50000",
           "#2962FF",
@@ -130,25 +126,24 @@ export default {
           "#FF8A80",
           "#82B1FF",
         ];
-        for (const [index, _] of this.data.datasets.entries()) {
-          this.data.datasets[index].label =
-            index % 2 === 0 ? "Systolic" : "Diastolic";
-          this.data.datasets[index].borderColor = borderColors[index];
-          this.data.datasets[
-            index
-          ].backgroundColor = `${borderColors[index]}88`;
-          this.data.datasets[index].fill = false;
-          this.data.datasets[index].lineTension = 0;
+        for (const [ix, _] of this.data.datasets.entries()) {
+          // this.data.datasets[ix].label =
+          //   ix % 2 === 0 ? "Systolic" : "Diastolic";
+          this.data.datasets[ix].label = this.data.dateFrom[Math.trunc(ix / 2)];
+          this.data.datasets[ix].borderColor = borderColors[ix];
+          this.data.datasets[ix].backgroundColor = `${borderColors[ix]}88`;
+          // ToDo: 共通プロパティを個別にセット(無駄)
+          this.data.datasets[ix].fill = false;
+          this.data.datasets[ix].lineTension = 0;
         }
+        // ここまで外出し化を考える
 
-        // TODO:ここで巻き上げた配列を消す
-        var needDeleteCnt = 0;
-        for (const [index, _] of this.data.datasets.entries()) {
-          if (this.data.datasets[index].borderColor === undefined) {
-            needDeleteCnt++;
+        // ToDo: ここで巻き上げた配列を消す
+        this.data.datasets.length -= this.data.datasets.filter(
+          (val: { [index: string]: string }) => {
+            return val.borderColor === undefined;
           }
-        }
-        this.data.datasets.length -= needDeleteCnt;
+        ).length;
 
         this.data.datasets.push(
           {
@@ -160,7 +155,7 @@ export default {
             tooltips: {
               enabled: false,
             },
-            data: [...Array(14)].map((x) => 79),
+            data: [...Array(14)].map((_x) => 79),
           },
           {
             label: "Reference",
@@ -171,7 +166,7 @@ export default {
             tooltips: {
               enabled: false,
             },
-            data: [...Array(14)].map((x) => 84),
+            data: [...Array(14)].map((_x) => 84),
           },
           {
             label: "Reference",
@@ -182,7 +177,7 @@ export default {
             tooltips: {
               enabled: false,
             },
-            data: [...Array(14)].map((x) => 129),
+            data: [...Array(14)].map((_x) => 129),
           },
           {
             label: "Reference",
@@ -193,11 +188,11 @@ export default {
             tooltips: {
               enabled: false,
             },
-            data: [...Array(14)].map((x) => 134),
+            data: [...Array(14)].map((_x) => 134),
           }
         );
-        // TODO:これをページ遷移の都度
-        // this.$data._chart.destroy();
+        this.data.datasets[0].borderWidth = 5;
+        this.data.datasets[1].borderWidth = 5;
         this.renderChart(this.data, this.options);
       },
     },

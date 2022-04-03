@@ -58,7 +58,7 @@ export default {
       if (!this.$store.getters.isLoaded) {
         return false;
       }
-      // TODO:共通化→tooltipなどで再利用
+      // ToDo: 共通化→tooltipなどで再利用
       var target: { systolic: number; diastolic: number } | null = null;
       target = this.$store.getters.info.find(function (d: {
         date: string;
@@ -85,7 +85,7 @@ export default {
         );
       }
     },
-    dblClick(date): void {
+    dblClick(date: string): void {
       console.info("dblClick:" + date);
     },
   },
