@@ -144,7 +144,8 @@ export default {
         this.data.datasets[5].data = items[2].map((item: bP) => item.diastolic);
 
         console.info("??:" + this.data.datasets.length);
-        //ToDo: こっから
+        //FIXME: こっから
+        //  [ ]
         const borderColors = [
           "#D50000",
           "#2962FF",
@@ -159,14 +160,14 @@ export default {
           this.data.datasets[ix].label = this.data.dateFrom[Math.trunc(ix / 2)];
           this.data.datasets[ix].borderColor = borderColors[ix];
           this.data.datasets[ix].backgroundColor = `${borderColors[ix]}88`;
-          // ToDo: 共通プロパティを個別にセット(無駄)
+          // TODO: 共通プロパティを個別にセット(無駄)
           this.data.datasets[ix].fill = false;
           this.data.datasets[ix].lineTension = 0;
         }
         console.info("??:" + this.data.datasets.length);
-        // ここまで外出し化を考える
+        // FIXME: ここまで外出し化を考える
 
-        // ToDo: ここで巻き上げた配列を消す
+        // TODO: ここで巻き上げた配列を消す
         this.data.datasets.length -= this.data.datasets.filter(
           (val: { [index: string]: string }) => {
             return val.borderColor === undefined;
@@ -174,7 +175,7 @@ export default {
         ).length;
         console.info("??:" + this.data.datasets.length);
 
-        // ToDo: この辺をスッキリと書きたい
+        // TODO: この辺をスッキリと書きたい
         this.data.datasets.push(
           {
             label: "hidden",
