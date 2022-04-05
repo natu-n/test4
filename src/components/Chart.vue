@@ -7,33 +7,38 @@ dayjs.extend(isBetween);
 export default {
   extends: Line,
   name: "chart",
-  data() {
+  data(): {
+    data: {
+      dateFrom: any[];
+      dateTo: any[];
+      labels: number[];
+      type: string;
+      datasets: any[];
+    };
+    options: {
+      legend: {
+        position: string;
+        labels: {
+          fontSize: number;
+          filter: (items: { text: string }) => boolean;
+        };
+      };
+      responsive: boolean;
+      maintainAspectRatio: boolean;
+      width: number;
+      scales: {
+        yAxes: { ticks: { suggestedMin: number; suggestedMax: number } }[];
+      };
+      animation: boolean;
+    };
+  } {
     return {
       data: {
         dateFrom: [],
         dateTo: [],
         labels: [-13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0],
         type: "line",
-        datasets: [
-          {
-            data: [],
-          },
-          {
-            data: [],
-          },
-          {
-            data: [],
-          },
-          {
-            data: [],
-          },
-          {
-            data: [],
-          },
-          {
-            data: [],
-          },
-        ],
+        datasets: [],
       },
       options: {
         legend: {
@@ -41,7 +46,7 @@ export default {
           labels: {
             fontSize: 16,
             filter: (items: { text: string }): boolean =>
-              items.text != "Reference",
+              items.text != "hidden",
           },
         },
         responsive: true,
@@ -62,7 +67,7 @@ export default {
     };
   },
   //
-  mounted() {
+  mounted(): void {
     this.renderChart(this.data, this.options);
   },
   //
@@ -76,6 +81,26 @@ export default {
       immediate: true,
       handler: function (): void {
         console.info("Cart:watch");
+        var frame = {
+          label: "",
+          borderColor: "",
+          backgroundColor: "",
+          lineTension: 0,
+          pointRadius: 1,
+          borderWidth: 3, //  or 5
+          pointStyle: "circle",
+          fill: false,
+          tooltips: {
+            enabled: false,
+          },
+          data: [],
+        };
+        // 参照渡しになって同じ値に
+        console.info("bf:" + this.data.datasets.length);
+        if (this.data.datasets.length !== 10) {
+          [...Array(6)].map(() => this.data.datasets.push({ ...frame }));
+        }
+        console.info("af:" + this.data.datasets.length);
 
         //  Memo: 日付の計算
         this.data.dateTo[0] = this.$store.getters.today;
@@ -102,6 +127,7 @@ export default {
               )
           );
         }
+        console.info("??:" + this.data.datasets.length);
         // 血圧価設定
         interface bP {
           //  bP as blood pressure
@@ -117,6 +143,7 @@ export default {
         this.data.datasets[4].data = items[2].map((item: bP) => item.systolic);
         this.data.datasets[5].data = items[2].map((item: bP) => item.diastolic);
 
+        console.info("??:" + this.data.datasets.length);
         //ToDo: こっから
         const borderColors = [
           "#D50000",
@@ -136,6 +163,7 @@ export default {
           this.data.datasets[ix].fill = false;
           this.data.datasets[ix].lineTension = 0;
         }
+        console.info("??:" + this.data.datasets.length);
         // ここまで外出し化を考える
 
         // ToDo: ここで巻き上げた配列を消す
@@ -144,10 +172,12 @@ export default {
             return val.borderColor === undefined;
           }
         ).length;
+        console.info("??:" + this.data.datasets.length);
 
+        // ToDo: この辺をスッキリと書きたい
         this.data.datasets.push(
           {
-            label: "Reference",
+            label: "hidden",
             borderColor: "green",
             lineTension: 0,
             pointRadius: 0,
@@ -155,10 +185,10 @@ export default {
             tooltips: {
               enabled: false,
             },
-            data: [...Array(14)].map((_x) => 79),
+            data: [...Array(14)].fill(79),
           },
           {
-            label: "Reference",
+            label: "hidden",
             borderColor: "orange",
             lineTension: 0,
             pointRadius: 0,
@@ -166,10 +196,10 @@ export default {
             tooltips: {
               enabled: false,
             },
-            data: [...Array(14)].map((_x) => 84),
+            data: [...Array(14)].fill(84),
           },
           {
-            label: "Reference",
+            label: "hidden",
             borderColor: "green",
             lineTension: 0,
             pointRadius: 0,
@@ -177,10 +207,10 @@ export default {
             tooltips: {
               enabled: false,
             },
-            data: [...Array(14)].map((_x) => 129),
+            data: [...Array(14)].fill(129),
           },
           {
-            label: "Reference",
+            label: "hidden",
             borderColor: "orange",
             lineTension: 0,
             pointRadius: 0,
@@ -188,9 +218,10 @@ export default {
             tooltips: {
               enabled: false,
             },
-            data: [...Array(14)].map((_x) => 134),
+            data: [...Array(14)].fill(134),
           }
         );
+        // 直近を目立たせる
         this.data.datasets[0].borderWidth = 5;
         this.data.datasets[1].borderWidth = 5;
         this.renderChart(this.data, this.options);
