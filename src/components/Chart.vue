@@ -2,6 +2,8 @@
 import { Line } from "vue-chartjs";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
+import CONST from "../const/CONST";
+
 dayjs.extend(isBetween);
 
 export default {
@@ -9,8 +11,8 @@ export default {
   name: "chart",
   data(): {
     data: {
-      dateFrom: any[];
-      dateTo: any[];
+      dateFrom: string[];
+      dateTo: string[];
       labels: number[];
       type: string;
       datasets: any[];
@@ -78,9 +80,10 @@ export default {
   },
   watch: {
     foo: {
-      immediate: true,
+      immediate: true, //  NOTE:ページ遷移用に設定
       handler: function (): void {
-        console.info("Cart:watch");
+        console.info("Cart:watch"); // CHECK: debug line
+        //
         var frame = {
           label: "",
           borderColor: "",
@@ -95,14 +98,9 @@ export default {
           },
           data: [],
         };
-        // 参照渡しになって同じ値に
-        console.info("bf:" + this.data.datasets.length);
-        if (this.data.datasets.length !== 10) {
-          [...Array(6)].map(() => this.data.datasets.push({ ...frame }));
-        }
-        console.info("af:" + this.data.datasets.length);
-
-        //  Memo: 日付の計算
+        //
+        //  日付の計算
+        //
         this.data.dateTo[0] = this.$store.getters.today;
         this.data.dateTo[1] = formatDate({
           day: dayjs(this.data.dateTo[0]).subtract(1, "Month"),
@@ -116,18 +114,23 @@ export default {
         }
 
         const items = [];
-        for (const [ix, _] of this.data.dateTo.entries()) {
-          items[ix] = this.$store.getters.info.filter(
+        for (const [ix1, _] of this.data.dateTo.entries()) {
+          items[ix1] = this.$store.getters.info.filter(
             (item: { date: string }) =>
               dayjs(item.date).isBetween(
-                this.data.dateFrom[ix],
-                this.data.dateTo[ix],
+                this.data.dateFrom[ix1],
+                this.data.dateTo[ix1],
                 null,
-                "(]" //  以下指定だと結果が？
+                "(]" //  NOTE:以下指定だと結果が正しくない
               )
           );
         }
-        console.info("??:" + this.data.datasets.length);
+        //
+        // 参照渡しになって同じ値に
+        //
+        // NOTE:データテーブル初期化する
+        this.data.datasets.length = 0;
+        [...Array(6)].map(() => this.data.datasets.push({ ...frame }).concat);
         // 血圧価設定
         interface bP {
           //  bP as blood pressure
@@ -142,94 +145,30 @@ export default {
         //
         this.data.datasets[4].data = items[2].map((item: bP) => item.systolic);
         this.data.datasets[5].data = items[2].map((item: bP) => item.diastolic);
+        // IDEA:  dateをTooltipへ
 
-        console.info("??:" + this.data.datasets.length);
-        //FIXME: こっから
-        //  [ ]
-        const borderColors = [
-          "#D50000",
-          "#2962FF",
-          "#FF5252",
-          "#448AFF",
-          "#FF8A80",
-          "#82B1FF",
-        ];
-        for (const [ix, _] of this.data.datasets.entries()) {
+        for (const [ix2, _] of this.data.datasets.entries()) {
           // this.data.datasets[ix].label =
           //   ix % 2 === 0 ? "Systolic" : "Diastolic";
-          this.data.datasets[ix].label = this.data.dateFrom[Math.trunc(ix / 2)];
-          this.data.datasets[ix].borderColor = borderColors[ix];
-          this.data.datasets[ix].backgroundColor = `${borderColors[ix]}88`;
-          // TODO: 共通プロパティを個別にセット(無駄)
-          this.data.datasets[ix].fill = false;
-          this.data.datasets[ix].lineTension = 0;
+          this.data.datasets[ix2].label =
+            this.data.dateFrom[Math.trunc(ix2 / 2)];
+          this.data.datasets[ix2].borderColor = CONST.BORDERCOLORS[ix2];
+          this.data.datasets[
+            ix2
+          ].backgroundColor = `${CONST.BORDERCOLORS[ix2]}88`;
         }
-        console.info("??:" + this.data.datasets.length);
-        // FIXME: ここまで外出し化を考える
 
-        // TODO: ここで巻き上げた配列を消す
-        this.data.datasets.length -= this.data.datasets.filter(
-          (val: { [index: string]: string }) => {
-            return val.borderColor === undefined;
-          }
-        ).length;
-        console.info("??:" + this.data.datasets.length);
-
-        // TODO: この辺をスッキリと書きたい
-        this.data.datasets.push(
-          {
-            label: "hidden",
-            borderColor: "green",
-            lineTension: 0,
-            pointRadius: 0,
-            fill: false,
-            tooltips: {
-              enabled: false,
-            },
-            data: [...Array(14)].fill(79),
-          },
-          {
-            label: "hidden",
-            borderColor: "orange",
-            lineTension: 0,
-            pointRadius: 0,
-            fill: false,
-            tooltips: {
-              enabled: false,
-            },
-            data: [...Array(14)].fill(84),
-          },
-          {
-            label: "hidden",
-            borderColor: "green",
-            lineTension: 0,
-            pointRadius: 0,
-            fill: false,
-            tooltips: {
-              enabled: false,
-            },
-            data: [...Array(14)].fill(129),
-          },
-          {
-            label: "hidden",
-            borderColor: "orange",
-            lineTension: 0,
-            pointRadius: 0,
-            fill: false,
-            tooltips: {
-              enabled: false,
-            },
-            data: [...Array(14)].fill(134),
-          }
-        );
+        Array.prototype.push.apply(this.data.datasets, CONST.BORDER);
         // 直近を目立たせる
         this.data.datasets[0].borderWidth = 5;
         this.data.datasets[1].borderWidth = 5;
+        //
         this.renderChart(this.data, this.options);
       },
     },
   },
 };
+
 function calculate1stDay(day: dayjs.Dayjs): string {
   return formatDate({ day: dayjs(day).subtract(14, "day") });
 }

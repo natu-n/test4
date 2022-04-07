@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import dayjs from "dayjs";
-import color from "../const/color";
+import CONST from "../const/CONST";
 
 export default {
   data: () => ({
@@ -68,19 +68,19 @@ export default {
       //
       if (target) {
         return [
-          color.COLORS[getSystolicColor()],
-          color.COLORS[getDiastolicColor()],
+          CONST.COLORS[getSystolicColor()],
+          CONST.COLORS[getDiastolicColor()],
         ];
       } else return false;
       //
       function getSystolicColor(this: any): number {
-        return color.SYSTOLIC_THRESHOLD.findIndex(
+        return CONST.SYSTOLIC_THRESHOLD.findIndex(
           (systolic: number): boolean => systolic < target.systolic
         );
       }
       //
       function getDiastolicColor(this: any): number {
-        return color.DIASTOLIC_THRESHOLD.findIndex(
+        return CONST.DIASTOLIC_THRESHOLD.findIndex(
           (diastolic: number): boolean => diastolic < target.diastolic
         );
       }

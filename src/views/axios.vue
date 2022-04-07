@@ -1,6 +1,7 @@
 <script lang="ts">
 import dayjs from "dayjs";
-import color from "../const/color";
+import color from "../const/CONST";
+import CONST from '../const/CONST';
 
 export default {
   data(): { items: any[]; headers: { text: string; align: string; value: string; sortable: boolean; }[]; page: number; modal: boolean; } {
@@ -32,18 +33,18 @@ export default {
     //
     setSystolicColor(bp: number): string {
       return this.setColor(
-        color.SYSTOLIC_THRESHOLD.findIndex((systolic) => bp > systolic)
+        CONST.SYSTOLIC_THRESHOLD.findIndex((systolic) => bp > systolic)
       );
     },
     //
     setDiastolicColor(bp: number): string {
       return this.setColor(
-        color.DIASTOLIC_THRESHOLD.findIndex((diastolic) => bp > diastolic)
+        CONST.DIASTOLIC_THRESHOLD.findIndex((diastolic) => bp > diastolic)
       );
     },
     //
     setColor(ix: number): string {
-      return color.COLORS[ix];
+      return CONST.COLORS[ix];
     },
   },
   computed: {
