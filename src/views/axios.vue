@@ -1,6 +1,5 @@
 <script lang="ts">
 import dayjs from "dayjs";
-import color from "../const/CONST";
 import CONST from '../const/CONST';
 
 export default {
