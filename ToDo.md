@@ -40,36 +40,23 @@
     this.diastolicData = this.items.map((item) => item["diastolic"]);
 ```
 
-## 描画のタイミング
-
-isLoadedがtrueになったら描画(watch?)なら？
-
-https://qiita.com/mikene_koko/items/d15080a1b86251d078c7
-
++ v-date-pickerで同月内のみ表示するには
+  + maxとminを同月に設定、disabledはfalseに
 
 ```javascript
-      <v-date-picker
-        v-model="date"
-        @contextmenu:year="contextMenu"
-        @dblclick:date="dblClick"
-        @mouseenter:month="mouseEnter"
-        @mouseleave:month="mouseLeave"
-      ></v-date-picker>
-    </v-col>
-
-    methods: {
-      contextMenu (year, event) {
-        this.$set(this.done, 2, true)
-
-        event.preventDefault()
-
-        alert(`You have activated context menu for year ${year}`)
-      },
-      dblClick (date) {
-        this.$set(this.done, 0, true)
-
-        alert(`You have just double clicked the following date: ${date}`)
-      },
-    ```
-
-maxとminを同月に設定、disabledはfalseに
+const chartDataSet = {
+          {
+            label: "",
+            borderColor: "",
+            backgroundColor:  "",
+            lineTension: 0,
+            pointRadius: 0,
+            borderWidth:  0,  //  or 5
+            fill: false,
+            tooltips: {
+              enabled: false,
+            },
+            data: [],
+          },
+};
+```

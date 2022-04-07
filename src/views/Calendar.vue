@@ -30,7 +30,11 @@
 
 <script lang="ts">
 import dayjs from "dayjs";
+<<<<<<< HEAD
 import color from "../const/color";
+=======
+import CONST from "../const/CONST";
+>>>>>>> feature/ReactiveChart
 
 export default {
   data: () => ({
@@ -58,7 +62,7 @@ export default {
       if (!this.$store.getters.isLoaded) {
         return false;
       }
-      // TODO:共通化→tooltipなどで再利用
+      // ToDo: 共通化→tooltipなどで再利用
       var target: { systolic: number; diastolic: number } | null = null;
       target = this.$store.getters.info.find(function (d: {
         date: string;
@@ -68,24 +72,41 @@ export default {
       //
       if (target) {
         return [
+<<<<<<< HEAD
           color.COLORS[getSystolicColor()],
           color.COLORS[getDiastolicColor()],
+=======
+          CONST.COLORS[getSystolicColor()],
+          CONST.COLORS[getDiastolicColor()],
+>>>>>>> feature/ReactiveChart
         ];
       } else return false;
       //
       function getSystolicColor(this: any): number {
+<<<<<<< HEAD
         return color.SYSTOLIC_THRESHOLD.findIndex(
+=======
+        return CONST.SYSTOLIC_THRESHOLD.findIndex(
+>>>>>>> feature/ReactiveChart
           (systolic: number): boolean => systolic < target.systolic
         );
       }
       //
       function getDiastolicColor(this: any): number {
+<<<<<<< HEAD
         return color.DIASTOLIC_THRESHOLD.findIndex(
+=======
+        return CONST.DIASTOLIC_THRESHOLD.findIndex(
+>>>>>>> feature/ReactiveChart
           (diastolic: number): boolean => diastolic < target.diastolic
         );
       }
     },
+<<<<<<< HEAD
     dblClick(date): void {
+=======
+    dblClick(date: string): void {
+>>>>>>> feature/ReactiveChart
       console.info("dblClick:" + date);
     },
   },
