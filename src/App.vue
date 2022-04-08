@@ -17,12 +17,11 @@
             <v-sheet rounded="lg">
               <v-list>
                 <!-- <v-list-item-group v-model="model"> -->
-                <v-list-item-group>
+                <!--  IDEA: クリックした位置を保存(VUEX) -->
+                <v-list-item-group color="primary">
                   <v-list-item v-for="(period, i) in periods" :key="i">
                     <v-list-item-content>
-                      <v-list-item-title
-                        v-text="period"
-                      ></v-list-item-title>
+                      <v-list-item-title v-text="period"></v-list-item-title>
                     </v-list-item-content>
                   </v-list-item>
                 </v-list-item-group>

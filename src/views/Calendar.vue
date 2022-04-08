@@ -3,7 +3,7 @@
     <div>
       <div class="subheading">Past</div>
       <v-date-picker
-        v-model="date1"
+        v-model="pastDate"
         :first-day-of-week="1"
         :events="functionEvents"
         event-color="green lighten-1"
@@ -15,7 +15,7 @@
     <div>
       <div class="subheading">Current</div>
       <v-date-picker
-        v-model="date2"
+        v-model="currentDate"
         :first-day-of-week="1"
         :events="functionEvents"
         :disabled="false"
@@ -30,39 +30,47 @@
 
 <script lang="ts">
 import dayjs from "dayjs";
-<<<<<<< HEAD
-import color from "../const/color";
-=======
 import CONST from "../const/CONST";
->>>>>>> feature/ReactiveChart
 
 export default {
-  data: () => ({
-    date1: dayjs().subtract(1, "MONTH").endOf("month").format("YYYY-MM-DD"),
-    date2: dayjs().format("YYYY-MM-DD"),
-    // max/minを同月に設定することで移動不可
-    startOfTheMonth: dayjs().startOf("month").format("YYYY-MM-DD"),
-    endOfTheMonth: dayjs().endOf("month").format("YYYY-MM-DD"),
+  data(): {
+    pastDate: string;
+    startOfTheMonth: string;
+    endOfTheMonth: string;
+    currentDate: string;
+    endOfLastMonth: string;
+  } {
+    return {
+      pastDate: "",
+      startOfTheMonth: "",
+      endOfTheMonth: "",
+      currentDate: "",
+      endOfLastMonth: "",
+    };
+  },
+
+  created(): void {
+    const TODAY = this.$store.getters.today;
+    // NOTE: 先月までのカレンダープロパティ
+    this.pastDate = formatDate(
+      dayjs(TODAY).subtract(1, "MONTH")
+    );
+    this.endOfLastMonth = formatDate(
+      dayjs(TODAY).subtract(1, "MONTH").endOf("month")
+    );
     //
-    endOfLastMonth: dayjs()
-      .subtract(1, "MONTH")
-      .endOf("month")
-      .format("YYYY-MM-DD"),
-  }),
-
-  // created: function (): void {
-  //   this.$store.dispatch("getJSON");
-  // },
-
-  // computed:{},
+    // NOTE: 今月のカレンダー(移動不可)プロパティ
+    this.currentDate = TODAY;
+    this.startOfTheMonth = formatDate(dayjs(TODAY).startOf("month"));
+    this.endOfTheMonth = TODAY; // NOTE: 当日以降クリック不可
+  },
 
   methods: {
     functionEvents(date: string): false | string[] {
-
       if (!this.$store.getters.isLoaded) {
         return false;
       }
-      // ToDo: 共通化→tooltipなどで再利用
+      // TODO: 共通化→tooltipなどで再利用
       var target: { systolic: number; diastolic: number } | null = null;
       target = this.$store.getters.info.find(function (d: {
         date: string;
@@ -72,43 +80,31 @@ export default {
       //
       if (target) {
         return [
-<<<<<<< HEAD
-          color.COLORS[getSystolicColor()],
-          color.COLORS[getDiastolicColor()],
-=======
           CONST.COLORS[getSystolicColor()],
           CONST.COLORS[getDiastolicColor()],
->>>>>>> feature/ReactiveChart
         ];
       } else return false;
       //
       function getSystolicColor(this: any): number {
-<<<<<<< HEAD
-        return color.SYSTOLIC_THRESHOLD.findIndex(
-=======
         return CONST.SYSTOLIC_THRESHOLD.findIndex(
->>>>>>> feature/ReactiveChart
           (systolic: number): boolean => systolic < target.systolic
         );
       }
       //
       function getDiastolicColor(this: any): number {
-<<<<<<< HEAD
-        return color.DIASTOLIC_THRESHOLD.findIndex(
-=======
         return CONST.DIASTOLIC_THRESHOLD.findIndex(
->>>>>>> feature/ReactiveChart
           (diastolic: number): boolean => diastolic < target.diastolic
         );
       }
     },
-<<<<<<< HEAD
-    dblClick(date): void {
-=======
     dblClick(date: string): void {
->>>>>>> feature/ReactiveChart
       console.info("dblClick:" + date);
     },
   },
 };
+function formatDate(
+  day: string | number | Date | dayjs.Dayjs | null | undefined
+): string {
+  return dayjs(day).format("YYYY-MM-DD");
+}
 </script>
