@@ -11,13 +11,23 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     today: dayjs(new Date()).format("YYYY-MM-DD"),
-    toDate: dayjs(new Date()).format("YYYY-MM-DD"),
     info: [],
     isLoaded: false,
+    // TODO: ここに生やしていく？(必要最小限)
+    // - [ ] 生やすべきアイテム
+    //   - [ ] 一か月前
+    // A month ago
+    //   - [ ] 三か月前
+    // Three months ago
+    //   - [ ] 半年前
+    // Half a year ago
+    //   - [ ] 一年前
+    // one year ago
+    //   - [ ] 三年前(オプション)
+    // three years ago
   },
   getters: {
     today: (state) => state.today,
-    // info: (state) => state.info.filter(item => item.date != ""),
     info: (state) => state.info,
     isLoaded: (state) => state.isLoaded,
   },
@@ -30,9 +40,9 @@ export default new Vuex.Store({
       Vue.set(state, "isLoaded", isLoaded);
       console.info(`setisLoaded:${state.isLoaded}`);
     },
-    setToDate(state, toDate): void {
-      state.toDate = toDate;
-      console.info(`setToDate:${state.toDate}`);
+    setToday(state, today): void {
+      state.today = today;
+      console.info(`setToday:${state.today}`);
     },
   },
   actions: {

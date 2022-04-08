@@ -1,11 +1,6 @@
 <script lang="ts">
 import dayjs from "dayjs";
-<<<<<<< HEAD
-import color from "../const/color";
-=======
-import color from "../const/CONST";
 import CONST from '../const/CONST';
->>>>>>> feature/ReactiveChart
 
 export default {
   data(): { items: any[]; headers: { text: string; align: string; value: string; sortable: boolean; }[]; page: number; modal: boolean; } {
