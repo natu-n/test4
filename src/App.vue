@@ -16,10 +16,12 @@
           <v-col cols="2">
             <v-sheet rounded="lg">
               <v-list>
-                <!-- <v-list-item-group v-model="model"> -->
-                <!--  IDEA: クリックした位置を保存(VUEX) -->
                 <v-list-item-group color="primary">
-                  <v-list-item v-for="(period, i) in periods" :key="i">
+                  <v-list-item
+                    v-for="(period, item) in periods"
+                    :key="item"
+                    @click="select(item)"
+                  >
                     <v-list-item-content>
                       <v-list-item-title v-text="period"></v-list-item-title>
                     </v-list-item-content>
@@ -55,7 +57,7 @@ export default Vue.extend({
   name: "App",
 
   data: () => ({
-    links: ["Calendar", "DataGrid", "Chart", "Updates"],
+    links: ["Calendar", "DataGrid", "Chart", "Lab"],
     periods: [
       "one month ago",
       "3 months ago",
@@ -63,10 +65,18 @@ export default Vue.extend({
       "last year",
       "3 years ago",
     ],
+    stuts: 0,
   }),
   mounted: function (): void {
     console.info("dispatch");
     this.$store.dispatch("getJSON");
+  },
+  methods: {
+    select: function (item:number): void {
+      this.stuts = item;
+      this.$store.commit("setStuts", this.stuts);
+      console.info("item:" + this.stuts);
+    },
   },
 });
 </script>
