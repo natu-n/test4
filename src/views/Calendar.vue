@@ -3,7 +3,7 @@
     <div>
       <div class="subheading">Past</div>
       <v-date-picker
-        v-model="pastDate"
+        v-model="pastMonth"
         :first-day-of-week="1"
         :events="functionEvents"
         event-color="green lighten-1"
@@ -32,37 +32,51 @@
 import dayjs from "dayjs";
 import CONST from "../const/CONST";
 
+interface calendarInterface {
+  pastMonth: string;
+  startOfTheMonth: string;
+  endOfTheMonth: string;
+  currentDate: string;
+  endOfLastMonth: string;
+  pastDate: string[];
+  stuts: number;
+}
+
 export default {
-  data(): {
-    pastDate: string;
-    startOfTheMonth: string;
-    endOfTheMonth: string;
-    currentDate: string;
-    endOfLastMonth: string;
-  } {
+  data(): calendarInterface {
     return {
-      pastDate: "",
+      pastMonth: "",
       startOfTheMonth: "",
       endOfTheMonth: "",
       currentDate: "",
       endOfLastMonth: "",
+      pastDate: this.$store.getters.pastDate,
+      stuts: this.$store.getters.stuts,
     };
   },
 
   created(): void {
     const TODAY = this.$store.getters.today;
     // NOTE: 先月までのカレンダープロパティ
-    this.pastDate = formatDate(
-      dayjs(TODAY).subtract(1, "MONTH")
-    );
-    this.endOfLastMonth = formatDate(
-      dayjs(TODAY).subtract(1, "MONTH").endOf("month")
-    );
+    // TODO: ここを動的に差し替える事で実現
+    this.pastMonth = dayjs(TODAY).subtract(1, "MONTH").format("YYYY-MM-DD");
+    // NOTE:これ以降は変更不要
+    this.endOfLastMonth = dayjs(TODAY)
+      .subtract(1, "MONTH")
+      .endOf("month")
+      .format("YYYY-MM-DD");
     //
     // NOTE: 今月のカレンダー(移動不可)プロパティ
     this.currentDate = TODAY;
-    this.startOfTheMonth = formatDate(dayjs(TODAY).startOf("month"));
+    this.startOfTheMonth = dayjs(TODAY).startOf("month").format("YYYY-MM-DD");
     this.endOfTheMonth = TODAY; // NOTE: 当日以降クリック不可
+  },
+
+  computed: {
+    foo(): number {
+      this.stuts = this.$store.getters.stuts;
+      return this.$store.getters.stuts;
+    },
   },
 
   methods: {
@@ -97,14 +111,23 @@ export default {
         );
       }
     },
+
+    // NOTE: 実験用
     dblClick(date: string): void {
       console.info("dblClick:" + date);
+      // NOTE: modelの日付を入れ替えるとreactiveに表示が変わる
+      // this.pastMonth = "2021-08-19";
+    },
+  },
+  watch: {
+    foo: {
+      immediate: true,
+      handler: function (): void {
+        // BUG: 初回でも呼ばれない？
+        console.info(`stutsの値が変更されました:${this.stuts}:`);
+        this.pastMonth = this.pastDate[this.stuts];
+      },
     },
   },
 };
-function formatDate(
-  day: string | number | Date | dayjs.Dayjs | null | undefined
-): string {
-  return dayjs(day).format("YYYY-MM-DD");
-}
 </script>

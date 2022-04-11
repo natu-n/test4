@@ -1,3 +1,41 @@
+<template>
+  <v-container>
+    <v-data-table
+      class="font-weight-bold elevation-1"
+      :dense="true"
+      :headers="headers"
+      :items="items"
+      :items-per-page="14"
+      :fixed-header="true"
+      :sort-by="['date']"
+      :sort-desc="['true']"
+      :footer-props="{
+        showFirstLastPage: true,
+        firstIcon: 'mdi-arrow-collapse-left',
+        lastIcon: 'mdi-arrow-collapse-right',
+        prevIcon: 'mdi-minus',
+        nextIcon: 'mdi-plus',
+        itemsPerPageOptions: [7, 14, 30, 90],
+      }"
+      height="500px"
+    >
+      <template v-slot:item.date="{ item }">
+        <td>{{ formatDate(item.date) }}</td>
+      </template>
+      <template v-slot:item.systolic="{ item }">
+        <v-chip :color="setSystolicColor(item.systolic)" dark small>{{
+          item.systolic
+        }}</v-chip>
+      </template>
+      <template v-slot:item.diastolic="{ item }">
+        <v-chip :color="setDiastolicColor(item.diastolic)" dark small>{{
+          item.diastolic
+        }}</v-chip>
+      </template>
+    </v-data-table>
+  </v-container>
+</template>
+
 <script lang="ts">
 import dayjs from "dayjs";
 import CONST from '../const/CONST';
@@ -62,44 +100,6 @@ export default {
   },
 };
 </script>
-
-<template>
-  <v-container>
-    <v-data-table
-      class="font-weight-bold elevation-1"
-      :dense="true"
-      :headers="headers"
-      :items="items"
-      :items-per-page="14"
-      :fixed-header="true"
-      :sort-by="['date']"
-      :sort-desc="['true']"
-      :footer-props="{
-        showFirstLastPage: true,
-        firstIcon: 'mdi-arrow-collapse-left',
-        lastIcon: 'mdi-arrow-collapse-right',
-        prevIcon: 'mdi-minus',
-        nextIcon: 'mdi-plus',
-        itemsPerPageOptions: [7, 14, 30, 90],
-      }"
-      height="500px"
-    >
-      <template v-slot:item.date="{ item }">
-        <td>{{ formatDate(item.date) }}</td>
-      </template>
-      <template v-slot:item.systolic="{ item }">
-        <v-chip :color="setSystolicColor(item.systolic)" dark small>{{
-          item.systolic
-        }}</v-chip>
-      </template>
-      <template v-slot:item.diastolic="{ item }">
-        <v-chip :color="setDiastolicColor(item.diastolic)" dark small>{{
-          item.diastolic
-        }}</v-chip>
-      </template>
-    </v-data-table>
-  </v-container>
-</template>
 
 <style>
 .v-data-table-header tr {

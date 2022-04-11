@@ -31,5 +31,10 @@ export default new Router({
       name: "Chart",
       component: loadView("BPChart"),
     },
+    {
+      path: "/Lab",
+      name: "lab",
+      component: loadView("experimental"),
+    },
   ],
 });

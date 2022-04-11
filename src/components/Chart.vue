@@ -9,35 +9,13 @@ dayjs.extend(isBetween);
 export default {
   extends: Line,
   name: "chart",
-  data(): {
-    data: {
-      dateFrom: string[];
-      dateTo: string[];
-      labels: number[];
-      type: string;
-      datasets: any[];
-    };
-    options: {
-      legend: {
-        position: string;
-        labels: {
-          fontSize: number;
-          filter: (items: { text: string }) => boolean;
-        };
-      };
-      responsive: boolean;
-      maintainAspectRatio: boolean;
-      width: number;
-      scales: {
-        yAxes: { ticks: { suggestedMin: number; suggestedMax: number } }[];
-      };
-      animation: boolean;
-    };
-  } {
+  data(): ChartInterface {
     return {
+      pastDate: this.$store.getters.pastDate,
+      stuts: this.$store.getters.stuts,
+      dateFrom: [],
+      dateTo: [],
       data: {
-        dateFrom: [],
-        dateTo: [],
         labels: [-13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0],
         type: "line",
         datasets: [],
@@ -52,6 +30,7 @@ export default {
           },
         },
         responsive: true,
+        animation: false,
         maintainAspectRatio: false,
         width: 5,
         scales: {
@@ -64,7 +43,6 @@ export default {
             },
           ],
         },
-        animation: false,
       },
     };
   },
@@ -98,28 +76,24 @@ export default {
           },
           data: [],
         };
-        //
         //  日付の計算
-        //
-        this.data.dateTo[0] = this.$store.getters.today;
-        this.data.dateTo[1] = formatDate({
-          day: dayjs(this.data.dateTo[0]).subtract(1, "Month"),
-        });
-        this.data.dateTo[2] = formatDate({
-          day: dayjs(this.data.dateTo[0]).subtract(1, "Year"),
+        this.dateTo[0] = this.$store.getters.today;
+        // IDEA: ここで選択した日付を指定
+        this.dateTo[1] = formatDate({
+          day: dayjs(this.dateTo[0]).subtract(1, "Month"),
         });
 
-        for (const [ix, _] of this.data.dateTo.entries()) {
-          this.data.dateFrom[ix] = calculate1stDay(this.data.dateTo[ix]);
+        for (const [ix, _] of this.dateTo.entries()) {
+          this.dateFrom[ix] = calculate1stDay(this.dateTo[ix]);
         }
 
         const items = [];
-        for (const [ix1, _] of this.data.dateTo.entries()) {
+        for (const [ix1, _] of this.dateTo.entries()) {
           items[ix1] = this.$store.getters.info.filter(
             (item: { date: string }) =>
               dayjs(item.date).isBetween(
-                this.data.dateFrom[ix1],
-                this.data.dateTo[ix1],
+                this.dateFrom[ix1],
+                this.dateTo[ix1],
                 null,
                 "(]" //  NOTE:以下指定だと結果が正しくない
               )
@@ -130,28 +104,19 @@ export default {
         //
         // NOTE:データテーブル初期化する
         this.data.datasets.length = 0;
-        [...Array(6)].map(() => this.data.datasets.push({ ...frame }).concat);
+        [...Array(4)].map(() => this.data.datasets.push({ ...frame }).concat);
         // 血圧価設定
-        interface bP {
-          //  bP as blood pressure
-          systolic: number;
-          diastolic: number;
-        }
         this.data.datasets[0].data = items[0].map((item: bP) => item.systolic);
         this.data.datasets[1].data = items[0].map((item: bP) => item.diastolic);
         //
         this.data.datasets[2].data = items[1].map((item: bP) => item.systolic);
         this.data.datasets[3].data = items[1].map((item: bP) => item.diastolic);
-        //
-        this.data.datasets[4].data = items[2].map((item: bP) => item.systolic);
-        this.data.datasets[5].data = items[2].map((item: bP) => item.diastolic);
         // IDEA:  dateをTooltipへ
 
         for (const [ix2, _] of this.data.datasets.entries()) {
           // this.data.datasets[ix].label =
           //   ix % 2 === 0 ? "Systolic" : "Diastolic";
-          this.data.datasets[ix2].label =
-            this.data.dateFrom[Math.trunc(ix2 / 2)];
+          this.data.datasets[ix2].label = this.dateFrom[Math.trunc(ix2 / 2)];
           this.data.datasets[ix2].borderColor = CONST.BORDERCOLORS[ix2];
           this.data.datasets[
             ix2
@@ -174,5 +139,45 @@ function calculate1stDay(day: dayjs.Dayjs): string {
 }
 function formatDate({ day }: { day: dayjs.Dayjs }): string {
   return dayjs(day).format("YYYY-MM-DD");
+}
+
+// TODO:外だし
+interface ChartInterface {
+  pastDate: string[];
+  stuts: number;
+  dateFrom: string[];
+  dateTo: string[];
+  data: {
+    labels: number[];
+    type: string;
+    datasets: any[];
+  };
+  options: {
+    legend: {
+      position: string;
+      labels: {
+        fontSize: number;
+        filter: (items: { text: string }) => boolean;
+      };
+    };
+    responsive: boolean;
+    maintainAspectRatio: boolean;
+    width: number;
+    scales: {
+      yAxes: {
+        ticks: {
+          suggestedMin: number;
+          suggestedMax: number;
+        };
+      }[];
+    };
+    animation: boolean;
+  };
+}
+
+interface bP {
+  //  bP as blood pressure
+  systolic: number;
+  diastolic: number;
 }
 </script>
