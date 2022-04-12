@@ -13,23 +13,22 @@ export default new Vuex.Store({
     today: dayjs(new Date()).format("YYYY-MM-DD"),
     info: [],
     isLoaded: false,
-    // TODO: ここに生やしていく？(必要最小限)
-    // - [ ] 生やすべきアイテム
-    //   - [ ] 一か月前
-    // A month ago
-    //   - [ ] 三か月前
-    // Three months ago
-    //   - [ ] 半年前
-    // Half a year ago
-    //   - [ ] 一年前
-    // one year ago
-    //   - [ ] 三年前(オプション)
-    // three years ago
+    pastDate: [
+      dayjs(new Date()).format("YYYY-MM-DD"), // NOTE: 先頭は当日
+      dayjs(new Date()).subtract(1, "MONTH").format("YYYY-MM-DD"),
+      dayjs(new Date()).subtract(3, "MONTH").format("YYYY-MM-DD"),
+      dayjs(new Date()).subtract(6, "MONTH").format("YYYY-MM-DD"),
+      dayjs(new Date()).subtract(1, "YEAR").format("YYYY-MM-DD"),
+      dayjs(new Date()).subtract(3, "YEAR").format("YYYY-MM-DD"),
+    ],
+    stuts: 0,
   },
   getters: {
     today: (state) => state.today,
     info: (state) => state.info,
     isLoaded: (state) => state.isLoaded,
+    pastDate: (state) => state.pastDate,
+    stuts: (state) => state.stuts,
   },
   mutations: {
     setInfo(state, info): void {
@@ -43,6 +42,10 @@ export default new Vuex.Store({
     setToday(state, today): void {
       state.today = today;
       console.info(`setToday:${state.today}`);
+    },
+    setStuts(state, stuts): void {
+      state.stuts = stuts;
+      console.info(`setStuts:${state.stuts}`);
     },
   },
   actions: {

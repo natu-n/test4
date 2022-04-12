@@ -24,12 +24,17 @@ export default new Router({
     {
       path: "/datagrid",
       name: "datagrid",
-      component: loadView("axios"),
+      component: loadView("Datagrid"),
     },
     {
       path: "/Chart",
       name: "Chart",
       component: loadView("BPChart"),
+    },
+    {
+      path: "/Lab",
+      name: "lab",
+      component: loadView("experimental"),
     },
   ],
 });
