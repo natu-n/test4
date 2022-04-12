@@ -12,7 +12,7 @@ export default {
   data(): ChartInterface {
     return {
       pastDate: this.$store.getters.pastDate,
-      stuts: this.$store.getters.stuts,
+      stuts: 1,
       dateFrom: [],
       dateTo: [],
       data: {
@@ -52,8 +52,8 @@ export default {
   },
   //
   computed: {
-    foo(): boolean {
-      return this.$store.getters.isLoaded;
+    foo(): any[] {
+      return [this.$store.getters.isLoaded, this.$store.getters.stuts];
     },
   },
   watch: {
@@ -62,7 +62,11 @@ export default {
       handler: function (): void {
         console.info("Cart:watch"); // CHECK: debug line
         //
-        var frame = {
+        if (!this.$store.getters.isLoaded) {
+          return;
+        }
+        //
+        let frame = {
           label: "",
           borderColor: "",
           backgroundColor: "",
@@ -76,12 +80,15 @@ export default {
           },
           data: [],
         };
-        //  日付の計算
+        // TODO: 全体的にリファクタリング必要
+        //  一つ目当日、二つ目はクリック
         this.dateTo[0] = this.$store.getters.today;
         // IDEA: ここで選択した日付を指定
-        this.dateTo[1] = formatDate({
-          day: dayjs(this.dateTo[0]).subtract(1, "Month"),
-        });
+        this.stuts =
+          this.$store.getters.stuts > 0
+            ? this.$store.getters.stuts
+            : this.stuts;
+        this.dateTo[1] = this.pastDate[this.stuts];
 
         for (const [ix, _] of this.dateTo.entries()) {
           this.dateFrom[ix] = calculate1stDay(this.dateTo[ix]);

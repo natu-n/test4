@@ -14,7 +14,7 @@ export default new Vuex.Store({
     info: [],
     isLoaded: false,
     pastDate: [
-      // dayjs(new Date()).format("YYYY-MM-DD"),
+      dayjs(new Date()).format("YYYY-MM-DD"), // NOTE: 先頭は当日
       dayjs(new Date()).subtract(1, "MONTH").format("YYYY-MM-DD"),
       dayjs(new Date()).subtract(3, "MONTH").format("YYYY-MM-DD"),
       dayjs(new Date()).subtract(6, "MONTH").format("YYYY-MM-DD"),

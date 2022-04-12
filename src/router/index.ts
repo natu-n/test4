@@ -24,7 +24,7 @@ export default new Router({
     {
       path: "/datagrid",
       name: "datagrid",
-      component: loadView("axios"),
+      component: loadView("Datagrid"),
     },
     {
       path: "/Chart",
