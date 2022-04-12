@@ -58,9 +58,7 @@ export default {
   created(): void {
     const TODAY = this.$store.getters.today;
     // NOTE: 先月までのカレンダープロパティ
-    // TODO: ここを動的に差し替える事で実現
     this.pastMonth = dayjs(TODAY).subtract(1, "MONTH").format("YYYY-MM-DD");
-    // NOTE:これ以降は変更不要
     this.endOfLastMonth = dayjs(TODAY)
       .subtract(1, "MONTH")
       .endOf("month")
@@ -69,7 +67,7 @@ export default {
     // NOTE: 今月のカレンダー(移動不可)プロパティ
     this.currentDate = TODAY;
     this.startOfTheMonth = dayjs(TODAY).startOf("month").format("YYYY-MM-DD");
-    this.endOfTheMonth = TODAY; // NOTE: 当日以降クリック不可
+    this.endOfTheMonth = TODAY;
   },
 
   computed: {
@@ -115,17 +113,15 @@ export default {
     // NOTE: 実験用
     dblClick(date: string): void {
       console.info("dblClick:" + date);
-      // NOTE: modelの日付を入れ替えるとreactiveに表示が変わる
-      // this.pastMonth = "2021-08-19";
     },
   },
   watch: {
     foo: {
       immediate: true,
       handler: function (): void {
-        // BUG: 初回でも呼ばれない？
         console.info(`stutsの値が変更されました:${this.stuts}:`);
-        this.pastMonth = this.pastDate[this.stuts];
+        this.pastMonth =
+          this.stuts > 0 ? this.pastDate[this.stuts] : this.pastDate[1];
       },
     },
   },

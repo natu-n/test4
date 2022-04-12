@@ -59,6 +59,7 @@ export default Vue.extend({
   data: () => ({
     links: ["Calendar", "DataGrid", "Chart", "Lab"],
     periods: [
+      "today",
       "one month ago",
       "3 months ago",
       "6 months ago",

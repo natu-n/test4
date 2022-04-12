@@ -38,11 +38,36 @@
 
 <script lang="ts">
 import dayjs from "dayjs";
-import CONST from '../const/CONST';
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import CONST from "../const/CONST";
+
+dayjs.extend(isSameOrBefore);
+
+interface dataGridInterface {
+  today: string;
+  pastDate: string[];
+  stuts: number;
+  isLoaded: boolean;
+  //
+  items: any[];
+  headers: {
+    text: string;
+    align: string;
+    value: string;
+    sortable: boolean;
+  }[];
+  page: number;
+  modal: boolean;
+}
 
 export default {
-  data(): { items: any[]; headers: { text: string; align: string; value: string; sortable: boolean; }[]; page: number; modal: boolean; } {
+  data(): dataGridInterface {
     return {
+      today: this.$store.getters.today,
+      pastDate: this.$store.getters.pastDate,
+      stuts: this.$store.getters.stuts,
+      isLoaded: false,
+      //
       items: [],
       headers: [
         { text: "date", align: "center", value: "date", sortable: false },
@@ -64,6 +89,7 @@ export default {
     };
   },
   methods: {
+    // NOTE:グリッド表示の加工用
     formatDate(date: string): string {
       return dayjs(date).format("MM-DD-YYYY");
     },
@@ -85,16 +111,25 @@ export default {
     },
   },
   computed: {
-    foo(): boolean {
-      return this.$store.getters.isLoaded;
+    // CHECK: 複数監視するには？ https://qiita.com/sonimaru/items/0cf87934d90365ec10c3
+    foo(): any[] {
+      return [this.$store.getters.isLoaded, this.$store.getters.stuts];
     },
   },
   watch: {
     foo: {
       immediate: true,
-      handler: function (): void {
-        console.info("watch");
-        this.items = this.$store.getters.info;
+      handler: function (val: any): void {
+        console.info(`watch [0]:${val[0]}:[1]:${val[1]}`);
+        // TODO: 選択した日付を上限としてitemsにセットする
+        // https://day.js.org/docs/en/plugin/is-same-or-before
+        // dayjs('2010-10-20').isSameOrBefore('2010-10-19', 'year')
+
+        this.stuts = this.$store.getters.stuts;
+        console.info(`<=${this.pastDate[this.stuts]}:ix:${this.stuts}`);
+        this.items = this.$store.getters.info.filter((item: { date: string }) =>
+          dayjs(item.date).isSameOrBefore(this.pastDate[this.stuts], "day")
+        );
       },
     },
   },

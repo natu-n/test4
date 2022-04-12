@@ -5,14 +5,14 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title>today</v-list-item-title>
-          <v-list-item-subtitle>today :{{ today }}</v-list-item-subtitle>
+          <v-list-item-subtitle>today :{{ pastDate[0] }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title>one month ago</v-list-item-title>
           <v-list-item-subtitle
-            >pastDate[0] :{{ pastDate[0] }}</v-list-item-subtitle
+            >pastDate[0] :{{ pastDate[1] }}</v-list-item-subtitle
           >
         </v-list-item-content>
       </v-list-item>
@@ -20,7 +20,7 @@
         <v-list-item-content>
           <v-list-item-title>3 months ago</v-list-item-title>
           <v-list-item-subtitle
-            >pastDate[1] :{{ pastDate[1] }}</v-list-item-subtitle
+            >pastDate[1] :{{ pastDate[2] }}</v-list-item-subtitle
           >
         </v-list-item-content>
       </v-list-item>
@@ -28,7 +28,7 @@
         <v-list-item-content>
           <v-list-item-title>6 months ago</v-list-item-title>
           <v-list-item-subtitle
-            >pastDate[2] :{{ pastDate[2] }}</v-list-item-subtitle
+            >pastDate[2] :{{ pastDate[3] }}</v-list-item-subtitle
           >
         </v-list-item-content>
       </v-list-item>
@@ -36,7 +36,7 @@
         <v-list-item-content>
           <v-list-item-title>last year</v-list-item-title>
           <v-list-item-subtitle
-            >pastDate[3] :{{ pastDate[3] }}</v-list-item-subtitle
+            >pastDate[3] :{{ pastDate[4] }}</v-list-item-subtitle
           >
         </v-list-item-content>
       </v-list-item>
