@@ -60,8 +60,6 @@ export default {
     foo: {
       immediate: true, //  NOTE:ページ遷移用に設定
       handler: function (): void {
-        console.info("Cart:watch"); // CHECK: debug line
-        //
         if (!this.$store.getters.isLoaded) {
           return;
         }
