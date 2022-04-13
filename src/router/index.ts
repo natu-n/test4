@@ -24,12 +24,12 @@ export default new Router({
     {
       path: "/datagrid",
       name: "datagrid",
-      component: loadView("Datagrid"),
+      component: loadView("BpDatagrid"),
     },
     {
       path: "/Chart",
       name: "Chart",
-      component: loadView("BPChart"),
+      component: loadView("BpChart"),
     },
     {
       path: "/Lab",
