@@ -41,7 +41,7 @@
 
           <v-col>
             <v-sheet min-height="70vh" rounded="lg" eager>
-              <router-view class="chart-container" />
+              <router-view class="LineExample" />
             </v-sheet>
           </v-col>
         </v-row>

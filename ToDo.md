@@ -14,6 +14,9 @@
   + BpCart(TS以外)
   + Chart(TS)
 
-+ 変更後
++ 変更後(予定)
   + BpChart(Viewガワの初期表示)
   + Reactive用のデータ選択、Viewへの送信
+
++ 実際
+  + vue-echartsを試した
