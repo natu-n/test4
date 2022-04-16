@@ -15,6 +15,8 @@ import {
   LegendComponent,
   GridComponent,
   AxisPointerComponent,
+  MarkLineComponent,
+  MarkPointComponent,
 } from "echarts/components";
 import VChart, { THEME_KEY } from "vue-echarts";
 
@@ -28,6 +30,8 @@ use([
   TooltipComponent,
   LegendComponent,
   AxisPointerComponent,
+  MarkLineComponent,
+  MarkPointComponent,
 ]);
 
 export default {
@@ -41,20 +45,23 @@ export default {
   data() {
     return {
       option: {
-        title: {
-          text: "Line",
-        },
+        // title: {
+        //   text: "Line",
+        //   left: "center",
+        // },
         tooltip: {
           trigger: "axis",
         },
         legend: {
+          top: "Auto",
           data: ["Osystolic", "Odiastolic", "systolic", "diastolic"],
         },
         grid: {
-          left: "5%",
-          right: "5%",
-          bottom: "5%",
-          containLabel: true,
+          show: true,
+          // left: "5%",
+          // right: "5%",
+          // bottom: "5%",
+          containLabel: true, //  囲み線
         },
         // toolbox: {
         //   feature: {
@@ -62,10 +69,8 @@ export default {
         //   },
         // },
         xAxis: {
-          //  xAxis.axisLabel. rotate
           type: "category",
           boundaryGap: false,
-          // axisLabel:{rotate:180},
           data: [
             "10-19",
             "10-20",
@@ -85,6 +90,9 @@ export default {
         },
         yAxis: {
           type: "value",
+          // axisLabel: {
+          //   formatter: "mmHg",
+          // }
         },
         series: [
           {
@@ -95,22 +103,30 @@ export default {
               148,
             ],
             lineStyle: {
-              color: "Red",
+              color: "#EF9A9A",
             },
             symbol: "circle",
             symbolSize: 6,
-            colorBy: "series",
+            itemStyle: {
+              borderWidth: 0,
+              borderColor: "#EF9A9A",
+              color: "#EF9A9A",
+            },
           },
           {
             name: "Odiastolic",
             type: "line",
             data: [92, 99, 93, 91, 92, 100, 97, 93, 88, 79, 90, 84, 94, 104],
             lineStyle: {
-              color: "Blue",
+              color: "#90CAF9",
             },
             symbol: "circle",
             symbolSize: 6,
-            colorBy: "series",
+            itemStyle: {
+              borderWidth: 0,
+              borderColor: "#90CAF9",
+              color: "#90CAF9",
+            },
           },
           {
             name: "systolic",
@@ -120,35 +136,106 @@ export default {
               140,
             ],
             lineStyle: {
-              color: "Red",
+              color: "#F44336",
               width: 4,
             },
             symbol: "circle",
             symbolSize: 8,
-            colorBy: "series",
-            // label: {
-            //   position: "insideTop",
-            //   show: true,
-            // },
+            itemStyle: {
+              borderWidth: 0,
+              borderColor: "#F44336",
+              color: "#F44336",
+            },
           },
           {
             name: "diastolic",
             type: "line",
             data: [112, 120, 80, 106, 96, 97, 89, 84, 97, 89, 85, 84, 96, 90],
             lineStyle: {
-              color: "Blue",
+              color: "#2196F3",
               width: 4,
             },
             symbol: "circle",
             symbolSize: 8,
-            colorBy: "series",
-            markPoint: {
-              data: [
-                {
-                  type: "max",
-                },
-              ],
-              symbol: "pin",
+            itemStyle: {
+              borderWidth: 0,
+              borderColor: "#2196F3",
+              color: "#2196F3",
+            },
+            // 末尾にnameを表示できないか？
+            markLine: {
+              label: {
+                show: true,
+              },
+              data: [],
+              lineStyle: {
+                type: "solid",
+                color: "green",
+                width: 2,
+              },
+            },
+            // markLine: {
+            //   data: [{ type: "min", name: "Avg" }],
+            // },
+          },
+          {
+            type: "line",
+            data: [],
+            markLine: {
+              label: {
+                show: false,
+              },
+              data: [{ yAxis: 79 }],
+              lineStyle: {
+                type: "solid",
+                color: "green",
+                width: 2,
+              },
+            },
+          },
+          {
+            type: "line",
+            data: [],
+            markLine: {
+              label: {
+                show: false,
+              },
+              data: [{ yAxis: 84 }],
+              lineStyle: {
+                type: "solid",
+                color: "orange",
+                width: 2,
+              },
+            },
+          },
+          {
+            type: "line",
+            data: [],
+            markLine: {
+              label: {
+                show: false,
+              },
+              data: [{ yAxis: 129 }],
+              lineStyle: {
+                type: "solid",
+                color: "green",
+                width: 2,
+              },
+            },
+          },
+          {
+            type: "line",
+            data: [],
+            markLine: {
+              label: {
+                show: false,
+              },
+              data: [{ yAxis: 134 }],
+              lineStyle: {
+                type: "solid",
+                color: "orange",
+                width: 2,
+              },
             },
           },
         ],
@@ -161,6 +248,6 @@ export default {
 <style scoped>
 .chart {
   height: 400px;
-  width: 80%;
+  width: 95%;
 }
 </style>
