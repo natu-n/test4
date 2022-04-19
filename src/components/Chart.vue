@@ -1,5 +1,7 @@
 <script lang="ts">
-import { Line } from "vue-chartjs";
+import { Line, mixins } from "vue-chartjs";
+import chartjsPluginAnnotation from "chartjs-plugin-annotation";
+const { reactiveProp } = mixins;
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import CONST from "../const/CONST";
@@ -8,6 +10,7 @@ dayjs.extend(isBetween);
 
 export default {
   extends: Line,
+  mixins: [reactiveProp]
   name: "chart",
   data(): ChartInterface {
     return {
@@ -16,7 +19,22 @@ export default {
       dateFrom: [],
       dateTo: [],
       data: {
-        labels: [-13, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0],
+        labels: [
+          "-13d",
+          "-12d",
+          "-11d",
+          "-10d",
+          "-9d",
+          "-8d",
+          "-7d",
+          "-6d",
+          "-5d",
+          "-4d",
+          "-3d",
+          "-2d",
+          "-1d",
+          "today",
+        ],
         type: "line",
         datasets: [],
       },
@@ -38,7 +56,7 @@ export default {
             {
               ticks: {
                 suggestedMin: 70,
-                suggestedMax: 220,
+                suggestedMax: 200,
               },
             },
           ],
@@ -48,6 +66,24 @@ export default {
   },
   //
   mounted(): void {
+    const ano = {
+      annotation: {
+        annotations: [
+          {
+            type: "line", // 線を描画
+            id: "hLine",
+            mode: "horizontal", // 線を水平に引く
+            scaleID: "y-axis-0",
+            value: 70, // 基準となる数値
+            borderWidth: 10, // 基準線の太さ
+            borderColor: "red", // 基準線の色
+          },
+        ],
+      },
+    };
+
+    this.addPlugin(chartjsPluginAnnotation);
+    this.options.push(ano);
     this.renderChart(this.data, this.options);
   },
   //
@@ -153,7 +189,7 @@ interface ChartInterface {
   dateFrom: string[];
   dateTo: string[];
   data: {
-    labels: number[];
+    labels: string[];
     type: string;
     datasets: any[];
   };

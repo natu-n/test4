@@ -17,3 +17,12 @@
 + 変更後
   + BpChart(Viewガワの初期表示)
   + Reactive用のデータ選択、Viewへの送信
+
+```plantuml
+@startuml
+title シーケンス図
+アリス -> ボブ: リクエスト
+ボブ --> アリス: レスポンス
+@enduml
+```
+
