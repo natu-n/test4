@@ -13,6 +13,7 @@ Vue.component("apexchart", VueApexCharts);
 export default {
   data: function () {
     return {
+      // Constで良さげ
       chartOptions: {
         chart: {
           id: "vuechart-example",
@@ -23,6 +24,7 @@ export default {
           tooltip: { enabled: false },
         },
         annotations: {
+          position: "back",
           yaxis: [
             {
               y: 80,
@@ -30,10 +32,11 @@ export default {
               borderColor: "#000",
               fillColor: "#FF9800",
               // Trial:
-              label: {
-                text: "Y-axis range",
-                offsetX: 30,
-              },
+              // label: {
+              //   text: "Y-axis range",
+              //   textAnchor: "end",
+              //   offsetX: 30,
+              // },
             },
             {
               y: 130,
@@ -42,8 +45,47 @@ export default {
               fillColor: "#FF9800",
             },
           ],
+          points: [
+            {
+              x: "today", // "today"だとダメ
+              y: 140,
+              label: {
+                borderColor: "#FFF",
+                offsetY: 0,
+                style: {
+                  color: "#F44336",
+                 fontSize: 24,
+                },
+
+                text: "systolic",
+                textAnchor: "end",
+              },
+            },
+            {
+              x: "today", // "today"だとダメ
+              y: 90,
+              label: {
+                borderColor: "#FFF",
+                offsetY: 0,
+                style: {
+                  color: "#2196F3",
+                  fontSize: 24,
+                },
+
+                text: "diastolic",
+                textAnchor: "end",
+                position: "bottom",
+              },
+            },
+          ],
         },
-        colors: ["#F44336", "#2196F3", "#BDBDBD", "#BDBDBD"],
+        type: "line",
+        // ★☆正解☆★
+        stroke: {
+          width: [6, 6, 3, 3],
+        },
+        // Line Color
+        colors: ["#F44336", "#2196F3", "#BDBDBD", "#BDBDBD"], // grey lighten-1
         grid: {
           borderColor: "#E0E0E0",
           xaxis: {
@@ -56,45 +98,22 @@ export default {
               show: true,
             },
           },
-          // row: {
-          //   colors: ["#BDBDBD", "transparent"], // takes an array which will be repeated on columns
-          //   opacity: 0.5,
-          // },
         },
         markers: {
-          size: 2,
-          colors: ["#F44336", "#2196F3", "#BDBDBD", "#BDBDBD"],
+          size: [7, 7, 4, 4],
+          colors: ["#F44336", "#2196F3", "#BDBDBD", "#BDBDBD"], // grey lighten-1
+          strokeColor: "#FFFFFF",
+          strokeWidth: [6, 6, 3, 3],
           shape: "circle", // "circle" | "square" | "rect"
-          fillOpacity: 0.5,
-          strokeOpacity: 0.5,
-          strokeDashArray: [5, 5, 5, 5],
+          fillOpacity: 0,
+          strokeOpacity: 0,
+          strokeDashArray: [6, 6, 3, 3],
           showNullDataPoints: false,
-          // strokeColor: "#000000",
-          discrete: [
-            {
-              seriesIndex: 0,
-              dataPointIndex: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-            },
-            {
-              seriesIndex: 1,
-              dataPointIndex: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-            },
-            {
-              seriesIndex: 2,
-              dataPointIndex: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-            },
-            {
-              seriesIndex: 3,
-              dataPointIndex: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
-            },
-          ],
+          discrete: [],
         },
         //
         legend: {
           show: false,
-          floating: true,
-          position: "top",
-          horizontalAlign: "right",
         },
         xaxis: {
           type: "category",
@@ -112,19 +131,20 @@ export default {
             "-3d",
             "-2d",
             "-1d",
-            "Today",
+            "today",
           ],
           tickAmount: 14,
           tickPlacement: "on",
-          floating: true,
+          floating: false,
         },
         yaxis: {
-          // categories: ["systolic", "diastolic", "", ""],
           min: 70,
           max: 170,
-          floating: true,
+          floating: false, //  データラベルが見えなくなる
         },
+        //
       },
+      // series単体で渡されるので他のオプションを記載してもダメ
       series: [
         {
           name: "today",
@@ -132,26 +152,30 @@ export default {
             167, 163, 128, 169, 159, 148, 141, 146, 152, 149, 139, 135, 152,
             140,
           ],
+          // data: [],
         },
         {
           name: "today",
           data: [112, 120, 80, 106, 96, 97, 89, 84, 97, 89, 85, 84, 96, 90],
+          // data: [],
         },
         {
           name: "onr month ago",
-          // data: [
-          //   120, 127, 122, 126, 121, 126, 124, 122, 122, 128, 128, 132, 124,
-          //   125,
-          // ],
-          data: [],
+          data: [
+            120, 127, 122, 126, 121, 126, 124, 122, 122, 128, 128, 132, 124,
+            125,
+          ],
+          // data: [],
         },
         {
           name: "onr month ago",
-          // data: [84, 78, 76, 76, 77, 84, 79, 82, 79, 86, 77, 80, 80, 85],
-          data: [],
+          data: [84, 78, 76, 76, 77, 84, 79, 82, 79, 86, 77, 80, 80, 85],
+          // data: [],
         },
       ],
     };
   },
+  created: {},
+  // mounted: () => console.info("series:" + this.chartOptions.series.data.length),
 };
 </script>
