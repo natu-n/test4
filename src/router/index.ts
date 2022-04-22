@@ -36,5 +36,10 @@ export default new Router({
       name: "lab",
       component: loadView("experimental"),
     },
+    {
+      path: "/Map",
+      name: "map",
+      component: loadView("BpHeatmap"),
+    },
   ],
 });
