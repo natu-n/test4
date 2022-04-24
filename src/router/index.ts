@@ -19,7 +19,7 @@ export default new Router({
     {
       path: "/calendar",
       name: "calendar",
-      component: loadView("Calendar"),
+      component: loadView("BpCalendar"),
     },
     {
       path: "/datagrid",

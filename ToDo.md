@@ -73,3 +73,28 @@ export const DAYS_IN_ONE_YEAR = 365
 export const DAYS_IN_WEEK = 7
 export const SQUARE_SIZE = 10
 ```
+
+### 共通コンポーネント
+
++ パラメータでJSONを絞って返す
+
+```javascript
+{ "date": "2018-12-27", "systolic": 133, "diastolic": 94 },
+
+  this.stuts = this.$store.getters.stuts;
+  // NOTE: 親にデータを私のはthis.$parent.～
+  this.$parent.items = this.$store.getters.info.filter(
+    (item: { date: string }) =>
+  // TODO: 範囲を絞る ex)dayjs('2010-10-20').isSameOrBefore('2010-10-19', 'year')
+      dayjs().isSame(item.date, 'year')
+  );
+```
+
++ 上記データの形式変換
+
+```javascript
+{ "date": "2018-12-27", "systolic": 133, "diastolic": 94 },
+{ date: "2022-1-1", count: 1 },
+
+
+```
