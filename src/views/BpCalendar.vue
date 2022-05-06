@@ -29,6 +29,7 @@
 </template>
 
 <script lang="ts">
+import store from "@/store";
 import dayjs from "dayjs";
 import CONST from "../const/CONST";
 
@@ -50,13 +51,13 @@ export default {
       endOfTheMonth: "",
       currentDate: "",
       endOfLastMonth: "",
-      pastDate: this.$store.getters.pastDate,
-      stuts: this.$store.getters.stuts,
+      pastDate: store.getters.pastDate,
+      stuts: store.getters.stuts,
     };
   },
 
   created(): void {
-    const TODAY = this.$store.getters.today;
+    const TODAY = store.getters.today;
     // NOTE: 先月までのカレンダープロパティ
     this.pastMonth = dayjs(TODAY).subtract(1, "MONTH").format("YYYY-MM-DD");
     this.endOfLastMonth = dayjs(TODAY)
@@ -72,19 +73,19 @@ export default {
 
   computed: {
     foo(): number {
-      this.stuts = this.$store.getters.stuts;
-      return this.$store.getters.stuts;
+      this.stuts = store.getters.stuts;
+      return store.getters.stuts;
     },
   },
 
   methods: {
     functionEvents(date: string): false | string[] {
-      if (!this.$store.getters.isLoaded) {
+      if (!store.getters.isLoaded) {
         return false;
       }
       // TODO: 共通化→tooltipなどで再利用
       var target: { systolic: number; diastolic: number } | null = null;
-      target = this.$store.getters.info.find(function (d: {
+      target = store.getters.info.find(function (d: {
         date: string;
       }): boolean {
         return d.date === date;
