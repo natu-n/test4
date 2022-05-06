@@ -95,6 +95,9 @@ export const SQUARE_SIZE = 10
 ```javascript
 { "date": "2018-12-27", "systolic": 133, "diastolic": 94 },
 { date: "2022-1-1", count: 1 },
+```
 
-
+```mermaid
+flowchart LR
+(日付.filter) -> (Data.indexOf)
 ```

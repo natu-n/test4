@@ -8,7 +8,7 @@ const API_URL =
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state: {
     today: dayjs(new Date()).format("YYYY-MM-DD"),
     info: [],
@@ -66,3 +66,4 @@ export default new Vuex.Store({
     },
   },
 });
+export default store;

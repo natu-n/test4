@@ -51,6 +51,8 @@
 </template>
 
 <script lang="ts">
+import store from "@/store";
+
 export default {
   data(): {
     today: string;
@@ -58,16 +60,16 @@ export default {
     stuts: number;
   } {
     return {
-      today: this.$store.getters.today,
-      pastDate: this.$store.getters.pastDate,
-      stuts: this.$store.getters.stuts,
+      today: store.getters.today,
+      pastDate: store.getters.pastDate,
+      stuts: store.getters.stuts,
     };
   },
   created: {},
   computed: {
     foo(): number {
-      this.stuts = this.$store.getters.stuts;
-      return this.$store.getters.stuts;
+      this.stuts = store.getters.stuts;
+      return this.stuts;
     },
   },
   method: {},

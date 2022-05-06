@@ -1,6 +1,5 @@
 <template>
   <div class="small">
-    <Datagrid></Datagrid>
     <v-container>
       <v-data-table
         class="font-weight-bold elevation-1"
@@ -12,13 +11,13 @@
         :sort-by="['date']"
         :sort-desc="['true']"
         :footer-props="{
-        showFirstLastPage: true,
-        firstIcon: 'mdi-arrow-collapse-left',
-        lastIcon: 'mdi-arrow-collapse-right',
-        prevIcon: 'mdi-minus',
-        nextIcon: 'mdi-plus',
-        itemsPerPageOptions: [7, 14, 30, 90],
-      }"
+          showFirstLastPage: true,
+          firstIcon: 'mdi-arrow-collapse-left',
+          lastIcon: 'mdi-arrow-collapse-right',
+          prevIcon: 'mdi-minus',
+          nextIcon: 'mdi-plus',
+          itemsPerPageOptions: [7, 14, 30, 90],
+        }"
         height="500px"
       >
         <template v-slot:item.date="{ item }">
@@ -26,16 +25,12 @@
         </template>
         <template v-slot:item.systolic="{ item }">
           <v-chip :color="setSystolicColor(item.systolic)" dark small>
-            {{
-            item.systolic
-            }}
+            {{ item.systolic }}
           </v-chip>
         </template>
         <template v-slot:item.diastolic="{ item }">
           <v-chip :color="setDiastolicColor(item.diastolic)" dark small>
-            {{
-            item.diastolic
-            }}
+            {{ item.diastolic }}
           </v-chip>
         </template>
       </v-data-table>
@@ -45,15 +40,19 @@
 
 <script lang="ts">
 import dayjs from "dayjs";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import CONST from "../const/CONST";
-import Datagrid from "../components/Datagrid.vue";
+import store from "@/store";
+
+dayjs.extend(isSameOrBefore);
 
 export default {
-  components: {
-    Datagrid,
-  },
   data(): DSInterface {
     return {
+      today: store.getters.today,
+      pastDate: store.getters.pastDate,
+      stuts: store.getters.stuts,
+      isLoaded: store.getters.isLoaded,
       items: [],
       headers: [
         { text: "date", align: "center", value: "date", sortable: false },
@@ -74,6 +73,31 @@ export default {
       modal: false,
     };
   },
+  //
+  computed: {
+    // CHECK: 複数監視するには？ https://qiita.com/sonimaru/items/0cf87934d90365ec10c3
+    foo(): any[] {
+      return [store.getters["isLoaded"], store.getters["stuts"]];
+    },
+  },
+  //
+  watch: {
+    foo: {
+      immediate: true,
+      handler: function (): void {
+        if (!store.getters.isLoaded) {
+          return;
+        }
+        const pD: string = store.getters.pastDate[store.getters.stuts];
+        this.items = store.getters.info.filter(function (item: {
+          date: string;
+        }) {
+          return dayjs(item.date).isSameOrBefore(pD, "day");
+        });
+      },
+    },
+  },
+  //
   methods: {
     formatDate(date: string): string {
       return dayjs(date).format("MM-DD-YYYY");
@@ -95,11 +119,15 @@ export default {
 };
 
 interface DSInterface {
+  today: string;
+  pastDate: string[];
+  stuts: number;
+  isLoaded: boolean;
   items: any[];
   headers: [
     { text: string; align: string; value: string; sortable: boolean },
     { text: string; align: string; value: string; sortable: boolean },
-    { text: string; align: string; value: string; sortable: boolean },
+    { text: string; align: string; value: string; sortable: boolean }
   ];
   page: number;
   modal: boolean;

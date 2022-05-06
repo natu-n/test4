@@ -1,181 +1,166 @@
 <template>
   <div id="chart">
-    <apexchart type="line" width="95%" :options="chartOptions" :series="series"></apexchart>
+    <apexchart
+      type="line"
+      width="95%"
+      :series="series"
+      :options="chartOptions"
+    ></apexchart>
   </div>
 </template>
 
 <script lang="ts">
-import VueApexCharts from "vue-apexcharts";
 import Vue from "vue";
+import VueApexCharts from "vue-apexcharts";
+import CONST from "../const/CONST";
+import utils from "../components/utils.vue";
+import store from "@/store";
+
 Vue.use(VueApexCharts);
-
 Vue.component("apexchart", VueApexCharts);
+
 export default {
-  data: function () {
+  mixins: [utils],
+  data: function (): BpInterface {
     return {
-      // Constで良さげ
-      chartOptions: {
-        chart: {
-          id: "vuechart-example",
-          toolbar: {
-            show: false,
-          },
-          animations: { enabled: false },
-          tooltip: { enabled: false },
-        },
-        annotations: {
-          position: "back",
-          yaxis: [
-            {
-              y: 80,
-              y2: 84,
-              borderColor: "#000",
-              fillColor: "#FF9800",
-              // Trial:
-              // label: {
-              //   text: "Y-axis range",
-              //   textAnchor: "end",
-              //   offsetX: 30,
-              // },
-            },
-            {
-              y: 130,
-              y2: 134,
-              borderColor: "#000",
-              fillColor: "#FF9800",
-            },
-          ],
-          points: [
-            {
-              x: "today", // "today"だとダメ
-              y: 140,
-              label: {
-                borderColor: "#FFF",
-                offsetY: 0,
-                style: {
-                  color: "#F44336",
-                 fontSize: 24,
-                },
-
-                text: "systolic",
-                textAnchor: "end",
-              },
-            },
-            {
-              x: "today", // "today"だとダメ
-              y: 90,
-              label: {
-                borderColor: "#FFF",
-                offsetY: 0,
-                style: {
-                  color: "#2196F3",
-                  fontSize: 24,
-                },
-
-                text: "diastolic",
-                textAnchor: "end",
-                position: "bottom",
-              },
-            },
-          ],
-        },
-        type: "line",
-        // ★☆正解☆★
-        stroke: {
-          width: [6, 6, 3, 3],
-        },
-        // Line Color
-        colors: ["#F44336", "#2196F3", "#BDBDBD", "#BDBDBD"], // grey lighten-1
-        grid: {
-          borderColor: "#E0E0E0",
-          xaxis: {
-            lines: {
-              show: true,
-            },
-          },
-          yaxis: {
-            lines: {
-              show: true,
-            },
-          },
-        },
-        markers: {
-          size: [7, 7, 4, 4],
-          colors: ["#F44336", "#2196F3", "#BDBDBD", "#BDBDBD"], // grey lighten-1
-          strokeColor: "#FFFFFF",
-          strokeWidth: [6, 6, 3, 3],
-          shape: "circle", // "circle" | "square" | "rect"
-          fillOpacity: 0,
-          strokeOpacity: 0,
-          strokeDashArray: [6, 6, 3, 3],
-          showNullDataPoints: false,
-          discrete: [],
-        },
-        //
-        legend: {
-          show: false,
-        },
-        xaxis: {
-          type: "category",
-          categories: [
-            "-13d",
-            "-12d",
-            "-11d",
-            "-10d",
-            "-9d",
-            "-8d",
-            "-7d",
-            "-6d",
-            "-5d",
-            "-4d",
-            "-3d",
-            "-2d",
-            "-1d",
-            "today",
-          ],
-          tickAmount: 14,
-          tickPlacement: "on",
-          floating: false,
-        },
-        yaxis: {
-          min: 70,
-          max: 170,
-          floating: false, //  データラベルが見えなくなる
-        },
-        //
-      },
+      today: store.getters.today,
+      pastDate: store.getters.pastDate,
+      stuts: store.getters.stuts,
+      chartOptions: CONST.CHARTOPTIONS,
       // series単体で渡されるので他のオプションを記載してもダメ
-      series: [
-        {
-          name: "today",
-          data: [
-            167, 163, 128, 169, 159, 148, 141, 146, 152, 149, 139, 135, 152,
-            140,
-          ],
-          // data: [],
-        },
-        {
-          name: "today",
-          data: [112, 120, 80, 106, 96, 97, 89, 84, 97, 89, 85, 84, 96, 90],
-          // data: [],
-        },
-        {
-          name: "onr month ago",
-          data: [
-            120, 127, 122, 126, 121, 126, 124, 122, 122, 128, 128, 132, 124,
-            125,
-          ],
-          // data: [],
-        },
-        {
-          name: "onr month ago",
-          data: [84, 78, 76, 76, 77, 84, 79, 82, 79, 86, 77, 80, 80, 85],
-          // data: [],
-        },
-      ],
+      series: [],
     };
   },
-  created: {},
-  // mounted: () => console.info("series:" + this.chartOptions.series.data.length),
+  //
+  computed: {
+    foo(): [boolean, number] {
+      return [store.getters.isLoaded, store.getters.stuts];
+    },
+  },
+  //
+  watch: {
+    foo: {
+      immediate: true,
+      handler: function (): void {
+        if (!store.getters.isLoaded) {
+          return;
+        }
+        const [systolic, diastolic] = utils.methods.getSeries(this.today);
+        // ref https://apexcharts.com/vue-chart-demos/line-charts/realtime/
+        const _data1 = {
+          name: "today",
+          data: systolic,
+        };
+        const _data2 = {
+          name: "today",
+          data: diastolic,
+        };
+        //
+        this.series.length = 0;
+        //
+        this.series.push(_data1);
+        this.series.push(_data2);
+        //
+        const ix = store.getters.stuts == 0 ? 1 : store.getters.stuts;
+        const [systolic2, diastolic2] = utils.methods.getSeries(
+          this.pastDate[ix]
+        );
+        const _data3 = {
+          name: this.pastDate[ix],
+          data: systolic2,
+        };
+        const _data4 = {
+          name: this.pastDate[ix],
+          data: diastolic2,
+        };
+        // pushで表示されるがオプションが微妙に反映されない
+        this.series.push(_data3);
+        this.series.push(_data4);
+        //
+        // オプションを再セットしないと反映されない
+        let wkChartOptions = CONST.CHARTOPTIONS;
+        // wkChartOptions.annotations.position[0].y = 139;
+        this.chartOptions = { ...this.chartOptions, ...wkChartOptions };
+      },
+    },
+  },
 };
+interface BpInterface {
+  today: string;
+  pastDate: string;
+  stuts: number;
+  chartOptions: {
+    chart: {
+      id: string;
+      toolbar: { show: boolean };
+      animations: { enabled: boolean };
+      tooltip: { enabled: boolean };
+    };
+    annotations: {
+      position: string;
+      yaxis: {
+        y: number;
+        y2: number;
+        borderColor: string;
+        fillColor: string;
+      }[];
+      points: (
+        | {
+            x: string;
+            y: number;
+            label: {
+              borderColor: string;
+              offsetY: number;
+              style: { color: string; fontSize: number };
+              text: string;
+              textAnchor: string;
+              position?: undefined;
+            };
+          }
+        | {
+            x: string;
+            y: number;
+            label: {
+              borderColor: string;
+              offsetY: number;
+              style: { color: string; fontSize: number };
+              text: string;
+              textAnchor: string;
+              position: string;
+            };
+          }
+      )[];
+    };
+    type: string;
+    stroke: { width: number[] };
+    colors: string[];
+    grid: {
+      borderColor: string;
+      xaxis: { lines: { show: boolean } };
+      yaxis: { lines: { show: boolean } };
+    };
+    markers: {
+      size: number[];
+      colors: string[];
+      strokeColor: string;
+      strokeWidth: number[];
+      shape: string;
+      fillOpacity: number;
+      strokeOpacity: number;
+      strokeDashArray: number[];
+      showNullDataPoints: boolean;
+      discrete: any[];
+    };
+    legend: { show: boolean };
+    xaxis: {
+      type: string;
+      categories: string[];
+      tickAmount: number;
+      tickPlacement: string;
+      floating: boolean;
+    };
+    yaxis: { min: number; max: number; floating: boolean };
+  };
+  series: { name: string; data: number[] }[];
+}
 </script>
